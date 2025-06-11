@@ -5,4 +5,4 @@ const API = axios.create({ //here API is instance of axios
     withCreadentials: true, // You can enable credentials (cookies) for login-protected routes
 })
 
-export default API
+export default API 
