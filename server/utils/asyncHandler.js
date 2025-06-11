@@ -4,3 +4,9 @@ export class ErrorHandler extends Error{
         this.statusCode = statusCode;
     }
 }
+
+export const asyncHandler = (fun) =>{
+    (req, res, next) =>{
+        Promise.resolve(fun(req, res, next)).catch(next)
+    }
+}
