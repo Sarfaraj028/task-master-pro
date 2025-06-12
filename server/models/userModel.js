@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
+import validator from "validator";
 
 const userSchema = mongoose.Schema({
     name:{
@@ -32,4 +33,9 @@ userSchema.pre("save", async function (next) {
     next();
 })
 
-export const User = mongoose.Schema("User", userSchema)
+//comparePassword 
+userSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare(password, this.password)
+}
+
+export const User = mongoose.model("User", userSchema)

@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import apiRoute from "./routes/apiRoutes.js"
 import { connectDB } from "./db/db.js"
 import { errorMiddleware } from "./middlewares/errorMiddleware.js"
+import userRoute from "./routes/userRoute.js"
 
 const app = express()
 dotenv.config()
@@ -25,6 +26,7 @@ app.use(cors({
 app.get("/", (req, res)=>{
     res.send("Home page")
 })
+app.use("/api/user/", userRoute)
 
 //api routes
 app.use("/api", apiRoute)
@@ -40,3 +42,5 @@ app.listen(PORT, ()=>{
     console.log("App is running on the",PORT);
     
 })
+
+// const email = req.body.email.replace(/\s+/g, '').toLowerCase(); // Removes ALL spaces
