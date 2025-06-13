@@ -1,6 +1,6 @@
 import { asyncHandler,  ErrorHandler } from "../utils/asyncHandler.js";
 import { User } from "../models/userModel.js"
-import bcrypt from "bcrypt"
+import { sendToken } from "../utils/sendTokens.js";
 
 export const register = asyncHandler (async (req, res, next) =>{
     const {name, password} = req.body;
@@ -17,10 +17,7 @@ export const register = asyncHandler (async (req, res, next) =>{
 
     const user = await User.create({name, email, password})
     console.log("User Registered ", user);    
-    return res.status(200).json({
-        success: true,
-        message: `User Created Successfully", ${email}`
-    })
+    return sendToken(user, res, `Registererd as ${user.name}`)
 })
 
 export const login = asyncHandler (async (req, res, next) =>{
@@ -41,8 +38,5 @@ export const login = asyncHandler (async (req, res, next) =>{
         return next(new ErrorHandler("Incorrect password. Try Again!", 400))
     }
     console.log("Welcome back!", user.name);    
-    return res.status(200).json({
-        success: true,
-        message: `Welcome ${user.name}`
-    })
+    return sendToken(user, res, `Welcome back, ${user.name}`);
 })
