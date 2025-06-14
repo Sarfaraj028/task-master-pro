@@ -40,3 +40,14 @@ export const login = asyncHandler (async (req, res, next) =>{
     console.log("Welcome back!", user.name);    
     return sendToken(user, res, `Welcome back, ${user.name}`);
 })
+
+// get profile
+
+export const getProfile = asyncHandler(async (req, res) =>{
+    console.log(req.user.name)
+    return res.status(200).json({
+        success: true,
+        message: "Profile Fetched Suucessfully!",
+        user: req.user
+    })
+})

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import API from '../utils/api'
+import API from './api/axiosInstance.js';
 
 function App() {
   const [data, setData] = useState("");
@@ -11,7 +11,7 @@ function App() {
   useEffect(()=>{
     API.get("/api/test")
       .then(res => {
-        console.log('✅ Response from backend:', res.data, " jhatu")
+        console.log('✅ Response from backend:', res.data, " data")
         setData(res.data.message)
         setLoading(false)
       })

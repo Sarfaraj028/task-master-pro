@@ -14,7 +14,7 @@ const taskSchema = mongoose.Schema({
         enum: ["pending", "in-progress", "completed"],
         default: "pending"
     },
-    dueDate: {
+    deadline: {
         type: Date
     },
     priority: {
