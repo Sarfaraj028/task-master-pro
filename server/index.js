@@ -28,8 +28,8 @@ app.get("/", (req, res)=>{
 })
 app.use("/api/user/", userRoute)
 
-//api routes
-app.use("/api", apiRoute)
+//all tasks routes
+app.use("/api/task", apiRoute)
 
 // page not found
 app.use((req, res) =>{
