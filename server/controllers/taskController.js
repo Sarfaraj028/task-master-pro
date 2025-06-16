@@ -25,13 +25,28 @@ export const createTask = asyncHandler( async (req, res, next) =>{
     })
 } ) 
 
-// task get 
+// get tasks
 export const getTask = asyncHandler(async(req, res, next) =>{
-    const task = await Task.find({user: req.user._id})
+    const {status, priority} = req.query;
+
+    const queryObj = { user: req.user._id }
+
+    if(status) queryObj.status = status
+    if(priority) queryObj.priority = priority
+
+    console.log(queryObj)
+    const tasks = await Task.find(queryObj)
+
+    if(!tasks || tasks.length === 0){
+        return next(new ErrorHandler("No Tasks To Show!", 404))
+    }
+
     console.log(`task fetched for user${req.user._id}`);
     return res.status(200).json({
         success: true,
-        message: `All task fetched successfully! ${task}`
+        count: tasks.length,
+        message: `All task fetched successfully!`,
+        tasks
     })
 })
 

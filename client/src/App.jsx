@@ -1,33 +1,26 @@
 import React from 'react'
-import { useEffect, useState } from 'react'
-import API from './api/axiosInstance.js';
+import {BrowserRouter, Routes, Route} from "react-router-dom"
+import Layout from './components/Layout'
+import Home from './pages/Home'
+import Dashboard from './pages/Dashboard'
+import NoPage from './pages/NoPage'
+import SignUp from './pages/SignUp'
+import SignIn from './pages/SignIn'
 
 function App() {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
 
-
-  useEffect(()=>{
-    API.get("/api/test")
-      .then(res => {
-        console.log('✅ Response from backend:', res.data, " data")
-        setData(res.data.message)
-        setLoading(false)
-      })
-      
-      .catch(err => {
-        console.error(err)
-        setError(err);
-        setLoading(false)
-      });
-      
-  },[])
   return (
-    <div>
-      <h2>App</h2>
-      {loading ? <p>Loading....</p> : <p> {data} </p>}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path='/' element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/sign-up' element={<SignUp />} />
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/no-page' element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
