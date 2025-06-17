@@ -1,1 +1,13 @@
 @import "tailwindcss";
+*{
+    font-family: sans-serif;
+}
+
+.show-nav{
+    position: absolute;
+    left: 0;
+}
+.hide-nav{
+    position: absolute;
+    left: 400px;
+}
