@@ -1,33 +1,19 @@
 import React from "react";
-import { useEffect, useState } from 'react'
-import API from './api/axiosInstance.js';
 
-function TaskCard() {
-  const [data, setData] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    API.get("/api/test")
-      .then((res) => {
-        console.log("✅ Response from backend:", res.data, " data");
-        setData(res.data.message);
-        setLoading(false);
-      })
-
-      .catch((err) => {
-        console.error(err);
-        setError(err);
-        setLoading(false);
-      });
-  }, []);
-
-  return( 
-    <div>
-        <div>TaskCard</div>;
-        {loading ? <p>Loading....</p> : <p> {data} </p>}
+function TaskCard({title, status, deadline, priority}) {
+  return (
+    <div className="w-full flex justify-between items-center border-1 p-3 px-4 rounded-md mb-4">
+      <div>
+        <h3 className="text-lg">{title}</h3>
+        <p className="text-xs">{deadline}</p>
+      </div>
+      <div>
+        <span className="bg-green-200 p-1 px-3 rounded-md">{status}</span>
+        <i className="ri-pencil-line text-xl p-4 cursor-pointer"></i>
+        <i className="ri-delete-bin-6-line text-xl cursor-pointer"></i>
+      </div>
     </div>
-  )
+  );
 }
 
 export default TaskCard;
