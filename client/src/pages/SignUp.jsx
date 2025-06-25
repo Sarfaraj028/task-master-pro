@@ -2,6 +2,31 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance.js";
 import { toast } from "react-toastify";
+import validator from "validator";
+
+//validate email
+const commonEmailDomains = [
+  "gmail.com",
+  "yahoo.com",
+  "hotmail.com",
+  "outlook.com",
+  "protonmail.com",
+];
+
+const isEmailValid = (email) => {
+  if (!validator.isEmail(email)) {
+    toast.warning("Please enter a valid email address!");
+    return false;
+  }
+
+  const domain = email.split("@")[1]?.toLowerCase();
+
+  if (!commonEmailDomains.includes(domain)) {
+    toast.warning("Check you email Domain, Did you mean 'gmail.com'?");
+    return false;
+  }
+  return true;
+};
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -30,9 +55,13 @@ export default function Signup() {
       return;
     }
 
-    // ✅ 2. Check password match
-    if(password.length < 6 ){
-      toast.error("Password length must be atleast 6 character!")
+    //email validation 
+    const cleanedEmail = email.replace(/\s+/g, '').toLowerCase();
+    if(!isEmailValid(cleanedEmail)) return
+
+    // ✅ Check password match
+    if (password.length < 6) {
+      toast.error("Password length must be atleast 6 character!");
     }
 
     if (password !== confirmPassword) {
@@ -55,7 +84,7 @@ export default function Signup() {
         toast.success("Signup successful!");
         setTimeout(() => {
           navigate("/sign-in");
-        }, 1000);
+        }, 500);
       } else {
         toast.error("Signup failed. Unexpected response");
       }
@@ -95,29 +124,26 @@ export default function Signup() {
           value={formData.name}
           onChange={handleChange}
           className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-          required
         />
 
         <input
-          type="email"
+          type="text"
           name="email"
           placeholder="Email"
           autoComplete="off"
           value={formData.email}
           onChange={handleChange}
           className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-          required
         />
 
         <input
           type="password"
           name="password"
           placeholder="Password"
-          autoComplete="new-password"
+          autoComplete="off"
           value={formData.password}
           onChange={handleChange}
           className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-          required
         />
 
         <input
@@ -127,7 +153,6 @@ export default function Signup() {
           value={formData.confirmPassword}
           onChange={handleChange}
           className="w-full mb-6 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-          required
         />
 
         <button

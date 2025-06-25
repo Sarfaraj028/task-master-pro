@@ -21,9 +21,9 @@ function Dashboard() {
           </select>
         </div>
         {/* tasks components  */}
-        <TaskCard title="HTML" status="completed" deadline="25 june, 2025" />
-        <TaskCard title="CSS" status="pending" deadline="30 june, 2025" />
-        <TaskCard title="JavaScript" status="in-progress" deadline="23 june, 2025" />
+        <TaskCard title="HTML" status="completed" deadline="18 june, 2025" />
+        {/* <TaskCard title="CSS" status="pending" deadline="30 june, 2025" />
+        <TaskCard title="JavaScript" status="in-progress" deadline="23 june, 2025" /> */}
 
         {/* 🎨 Animated Blurred Balls */}
         <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-purple-700 opacity-40 rounded-full filter blur-3xl animate-pulse"></div>

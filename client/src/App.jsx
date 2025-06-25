@@ -6,8 +6,9 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import NoPage from "./pages/NoPage";
-import Register from "./components/Register";
 import CreatePost from "./components/Create";
+import Signup from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
           <Route path="/" element={<Layout />} className="float-end">
             <Route index element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/sign-up" element={<Register />} />
-            <Route path="/sign-in" element={<Register />} />
+            <Route path="/sign-up" element={<Signup />} />
+            <Route path="/sign-in" element={<SignIn />} />
             <Route path="/create" element={<CreatePost />} />
             <Route path="/*" element={<NoPage />} />
           </Route>
