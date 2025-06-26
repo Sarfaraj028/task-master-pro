@@ -3,16 +3,15 @@ import { asyncHandler, ErrorHandler } from "../utils/asyncHandler.js"
 
 // task post
 export const createTask = asyncHandler( async (req, res, next) =>{
-    const {title, description, status, deadline, priority} = req.body;
-    if(!title || !status){
-        console.error("Title and status is missing!");
+    const {title, description, deadline, priority} = req.body;
+    if(!title){
+        console.error("Title is missing!");
         return next(new ErrorHandler("Title and status is Required", 400))
     }
 
     const task = await Task.create({
         title,
         description,
-        status,
         deadline,
         priority,
         user: req.user._id
@@ -21,7 +20,8 @@ export const createTask = asyncHandler( async (req, res, next) =>{
     console.log("Task Created Successfully!");
     return res.status(201).json({
         success: true,
-        message: `Task Created Successfully! ${task}`
+        message: `Task Created Successfully!`,
+        task
     })
 } ) 
 
