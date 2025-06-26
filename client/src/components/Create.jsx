@@ -31,9 +31,9 @@ function CreatePost() {
         deadline,
         priority,
       });
-      const createdTask = data.task;
-      console.log("Task added Successfully! " + createdTask.title);
-      toast.success(createdTask.title + " Task added Successfully!");
+      const createdTask = data?.task;
+      console.log("Task added Successfully! " + createdTask?.title);
+      toast.success(title + " Task added Successfully!");
       setFormData({
         title: "",
         description: "",
@@ -42,8 +42,13 @@ function CreatePost() {
       setPriority("medium");
       return;
     } catch (err) {
-      console.log("📦 err.response.status:", err.response.status);
-      console.log("📩 err.response.data:", err.response.data); //
+      if (err.response) {
+        console.log("📦 err.response.status:", err.response.status);
+        console.log("📩 err.response.data:", err.response.data);
+      }
+      else{
+        console.log("No response received from backend! ",err.message);        
+      }
       const msg = err?.response?.data?.message || "Error while creating task!";
       toast.error(msg);
     }

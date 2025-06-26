@@ -5,4 +5,10 @@ const axiosInstance = axios.create({ //here API is instance of axios
     withCreadentials: true, // You can enable credentials (cookies) for login-protected routes
 })
 
+// 🌟 Attach token automatically if it exists
+const token = localStorage.getItem("authToken");
+if (token) {
+  axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+}
+
 export default axiosInstance

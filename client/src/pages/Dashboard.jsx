@@ -1,7 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import TaskCard from "../components/TaskCard";
+import axiosInstance from "../api/axiosInstance";
+import { toast } from "react-toastify";
 
 function Dashboard() {
+  const [tasks, setTasks] = useState([])
+  useEffect(()=>{
+    const fetchApi = async() =>{
+      try{
+        const {data} = await axiosInstance.get("/task")
+        setTasks(data.tasks)
+      }catch(err){
+        if(err.response){
+          console.log("Error status ", err.response.status);
+          console.log("Error message ", err.response.data);
+        }
+        else{
+          console.log("No error received from backend! ", err.message);
+        }
+        const msg = err?.response?.data?.message || "Error while fetching tasks!"
+        toast.error(msg)
+      }
+    }; fetchApi()
+  },[])
   return (
     <main>
       <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col  items-start p-5 md:pr-10 overflow-hidden bg-white/50 backdrop-blur-sm md:pl-9 pl-3 pr-3">
@@ -21,7 +42,9 @@ function Dashboard() {
           </select>
         </div>
         {/* tasks components  */}
-        <TaskCard title="HTML" status="completed" deadline="18 june, 2025" />
+        {tasks.map((task) =>{
+          return <TaskCard key={task._id} title={task.title} status={task.status} deadline={task.deadline.toLocaleString()} />
+        })}
         {/* <TaskCard title="CSS" status="pending" deadline="30 june, 2025" />
         <TaskCard title="JavaScript" status="in-progress" deadline="23 june, 2025" /> */}
 
