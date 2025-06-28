@@ -2,9 +2,19 @@ import React from "react";
 import { Outlet, Link, NavLink } from "react-router-dom";
 import "./Layout.css";
 import { useState } from "react";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 function Layout() {
   const [isVisible, setIsVisible] = useState(false);
+  const {user, logout} = useAuth()
+  const navigate = useNavigate()
+
+  //handleLogout 
+  const handleLogout = () =>{
+    logout()
+    navigate("/sign-in")
+  }
 
   const toggleSidebar = (visible) => {
     setIsVisible(visible);
@@ -84,7 +94,8 @@ function Layout() {
           <a className="top-4 my-6 md:ml-6 ml-0">
             {" "}
             {/* opnen nav icon */}
-            <i className="ri-menu-unfold-fill text-xl font-semibold md:text-3xl lg:opacity-0 opacity-100 text-purple-600 hover:text-purple-800 cursor-pointer"
+            <i
+              className="ri-menu-unfold-fill text-xl font-semibold md:text-3xl lg:opacity-0 opacity-100 text-purple-600 hover:text-purple-800 cursor-pointer"
               onClick={() => toggleSidebar(true)}
             />
           </a>
@@ -95,23 +106,27 @@ function Layout() {
           </li>
 
           {/* login signup button  */}
-          <div className="flex gap-4 list-none border-purple-600 border-2 rounded-md lg:p-3 p-1 py-2 lg:pl-5 pl-2">
-            <li>
-              <Link to="/sign-in" className="md:text-base text-sm">
-                SignIn
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/sign-up"
-                className="bg-purple-600 hover:bg-purple-700 p-2  text-sm md:text-base rounded-md text-white"
-              >
-                SignUp
-              </Link>
-            </li>
-          </div>
+          {user ? (
+            <> <button onClick={handleLogout} className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md"> Logout </button></>
+          ) : (
+            <div className="flex gap-4 list-none border-purple-600 border-2 rounded-md lg:p-3 p-1 py-2 lg:pl-5 pl-2">
+              <li>
+                <Link to="/sign-in" className="md:text-base text-sm">
+                  SignIn
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/sign-up"
+                  className="bg-purple-600 hover:bg-purple-700 p-2  text-sm md:text-base rounded-md text-white"
+                >
+                  SignUp
+                </Link>
+              </li>
+            </div>
+          )}
         </div>
-        
+
         <Outlet />
       </div>
     </div>

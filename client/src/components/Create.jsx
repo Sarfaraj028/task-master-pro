@@ -91,6 +91,7 @@ function CreatePost() {
           id="priority"
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
+          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
         >
           <option htmlFor="low">low</option>
           <option htmlFor="medium">medium</option>

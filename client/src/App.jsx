@@ -9,10 +9,12 @@ import NoPage from "./pages/NoPage";
 import CreatePost from "./components/Create";
 import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import {AuthProvider} from "./context/authContext"
 
 function App() {
   return (
     <>
+      <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />} className="float-end">
@@ -25,7 +27,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-
+      </AuthProvider>
       <ToastContainer position="top-right" autoClose={3000} />
     </>
   );

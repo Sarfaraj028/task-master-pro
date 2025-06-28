@@ -3,11 +3,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import validator from "validator";
+import { useAuth } from "../context/authContext";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const {login} = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +40,8 @@ function SignIn() {
         axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.token}`
 
       }
+      //store token in login
+      login(data.token)
 
       toast.success(data.message || "Logged in successfully!");
       console.log("Login Success:", data.user?.name || data);

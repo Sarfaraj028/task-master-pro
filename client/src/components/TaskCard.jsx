@@ -8,7 +8,7 @@ function TaskCard({title, status, deadline, priority}) {
         <p className="text-xs">{deadline}</p>
       </div>
       <div>
-        <span className="bg-green-200 p-1 px-3 rounded-md">{status}</span>
+        <span className={` ${status === 'completed' ?" bg-green-300" : status === "in-progress" ? "bg-orange-300" : "bg-red-300" }  p-1 px-3 rounded-md`}>{status}</span>
         <i className="ri-pencil-line text-xl p-4 cursor-pointer"></i>
         <i className="ri-delete-bin-6-line text-xl cursor-pointer"></i>
       </div>
