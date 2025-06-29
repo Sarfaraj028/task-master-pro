@@ -1,7 +1,7 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
@@ -9,24 +9,24 @@ import NoPage from "./pages/NoPage";
 import CreatePost from "./components/Create";
 import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
-import {AuthProvider} from "./context/authContext"
+import { AuthProvider } from "./context/authContext";
 
 function App() {
   return (
     <>
       <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />} className="float-end">
-            <Route index element={<Home />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/sign-up" element={<Signup />} />
-            <Route path="/sign-in" element={<SignIn />} />
-            <Route path="/create" element={<CreatePost />} />
-            <Route path="/*" element={<NoPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />} className="float-end">
+              <Route index element={<Home />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/sign-up" element={<Signup />} />
+              <Route path="/sign-in" element={<SignIn />} />
+              <Route path="/create" element={<CreatePost />} />
+              <Route path="/*" element={<NoPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
       <ToastContainer position="top-right" autoClose={3000} />
     </>

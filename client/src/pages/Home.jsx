@@ -1,22 +1,18 @@
 import React from "react";
 import Button from "../components/Button";
+import { NavLink } from "react-router-dom";
 
 function Home() {
   return (
-    <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 pr-10 overflow-hidden bg-white/50 backdrop-blur-sm">
-      {/* 🎨 Animated Blurred Balls */}
-      <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-purple-700 opacity-40 rounded-full filter blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-[-60px] right-[-60px] w-72 h-72 bg-pink-700 opacity-40 rounded-full filter blur-3xl animate-bounce"></div>
-      <div className="absolute top-[30%] right-[30%] w-80 h-60 bg-orange-500 opacity-30 rounded-full filter blur-2xl animate-spin-slow"></div>
-
+    <div className="w-full lg:min-h-9/10 h-[90vh] bg-purple-100 relative flex flex-col justify-center items-center p-5 pr-10 overflow-hidden">
       {/* 💬 Main Content */}
-      <h1 className="text-center lg:text-6xl md:text-5xl text-4xl font-bold mb-4 z-10">
+      <h1 className="text-center lg:text-6xl md:text-5xl text-4xl font-bold mb-4">
         ORGANIZE PRIORITIZE ACHIEVE
       </h1>
-      <h3 className="text-center text-2xl font-semibold mb-5 z-10">
+      <h3 className="text-center text-2xl font-semibold mb-5">
         WELCOME TO TASK MASTER PRO
       </h3>
-      <p className="text-center lg:px-20 z-10">
+      <p className="text-center lg:px-20">
         Your personal productivity assistant designed for developers, teams, and
         individuals who want to take control of their daily workflow. With
         powerful features like user authentication, secure task creation, smart
@@ -24,9 +20,12 @@ function Home() {
         Pro helps you stay organized and get things done faster.
       </p>
 
-      <Button onClick={() => console.log("clicked")} className="z-10 mt-6">
-        Create Your Task
-      </Button>
+      <li
+        className="mt-6 p-2 px-6 rounded-sm text-white bg-purple-600 list-none"
+        // onClick={() => toggleSidebar(false)}
+      >
+        <NavLink to="/create">Create Your Task</NavLink>
+      </li>
     </div>
   );
 }

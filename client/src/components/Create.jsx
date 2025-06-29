@@ -53,18 +53,15 @@ function CreatePost() {
       toast.error(msg);
     }
   };
-
+  
   return (
-    <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 pr-10 overflow-hidden bg-white/50 backdrop-blur-sm">
-      {/* 🎨 Animated Blurred Balls */}
-      <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-purple-700 opacity-40 rounded-full filter blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-[-60px] right-[-60px] w-72 h-72 bg-pink-700 opacity-40 rounded-full filter blur-3xl animate-bounce"></div>
-      <div className="absolute top-[30%] right-[30%] w-80 h-60 bg-orange-500 opacity-30 rounded-full filter blur-2xl animate-spin-slow"></div>
+    <div className="w-full bg-purple-100 lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 overflow-hidden">
+    
       <form
         onSubmit={handleSubmit}
-        className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md z-10"
+        className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Add Task</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Create Your Task</h2>
 
         {/* {error && <p className="text-red-600 mb-4">{error}</p>} */}
 
@@ -114,7 +111,7 @@ function CreatePost() {
           type="submit"
           className="w-full bg-purple-700 text-white py-3 rounded hover:bg-purple-800 transition"
         >
-          Sign Up
+          Add Task
         </button>
       </form>
     </div>

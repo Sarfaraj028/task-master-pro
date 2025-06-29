@@ -56,12 +56,9 @@ function SignIn() {
   };
 
   return (
-    <section className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 pr-10 overflow-hidden bg-white/50 backdrop-blur-sm">
-       {/* 🎨 Animated Blurred Balls */}
-      <div className="absolute top-[-50px] left-[-50px] w-72 h-72 bg-purple-700 opacity-40 rounded-full filter blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-[-60px] right-[-60px] w-72 h-72 bg-pink-700 opacity-40 rounded-full filter blur-3xl animate-bounce"></div>
-      <div className="absolute top-[30%] right-[30%] w-80 h-60 bg-orange-500 opacity-30 rounded-full filter blur-2xl animate-spin-slow"></div>
-      <form onSubmit={handleSubmit} autoComplete="off" className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md z-10">
+    <section className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 overflow-hidden">
+
+      <form onSubmit={handleSubmit} autoComplete="off" className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Login to your Profile</h2>
         <input
           type="text"
@@ -84,9 +81,9 @@ function SignIn() {
         <br />
         <button type="submit" className="w-full bg-purple-700 text-white py-3 rounded hover:bg-purple-800 transition">Login</button>
         <p className="text-center mt-4 text-sm">
-          Already have an account?{" "}
+          Create a new account?{" "}
           <a href="/sign-up" className="text-indigo-600 hover:underline">
-            Login
+            Sign Up
           </a>
         </p>
       </form>

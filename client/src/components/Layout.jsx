@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 function Layout() {
   const [isVisible, setIsVisible] = useState(false);
-  const {user, logout} = useAuth()
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
-  //handleLogout 
-  const handleLogout = () =>{
-    logout()
-    navigate("/sign-in")
-  }
+  //handleLogout
+  const handleLogout = () => {
+    logout();
+    navigate("/sign-in");
+  };
 
   const toggleSidebar = (visible) => {
     setIsVisible(visible);
@@ -23,7 +23,7 @@ function Layout() {
     <div className="flex">
       {/* side bar  */}
       <nav
-        className={`w-80 bg-gradient-to-bl from-purple-100 to-purple-400 pl-8 pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
+        className={`w-80 bg-purple-200 pl-8 pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
           ${
             isVisible ? "absolute left-0 z-10 " : "absolute -left-[380px]"
           } lg:left-0`}
@@ -37,13 +37,13 @@ function Layout() {
           {/* <hr className="mt-4 h[4px]" /> */}
         </li>
         <p
-          className=" absolute top-4 right-5 p-1 px-2 text-lg rounded-3xl cursor-pointer hover:bg-gray-100 bg-gray-50 lg:opacity-0 opacity-100 "
+          className=" absolute top-4 right-5 p-1 px-2 text-lg rounded-3xl cursor-pointer hover:bg-purple-600 bg-purple-500 lg:opacity-0 opacity-100 "
           onClick={() => toggleSidebar(false)}
         >
           {/* close icon  */}
           <i className="ri-close-line"></i>
         </p>
-        <ul>
+        <ul className="z-10">
           <li className="p-3 pl-1 rounded-sm">
             <NavLink
               to="/"
@@ -56,10 +56,11 @@ function Layout() {
               <i className="ri-home-4-line"></i> Home
             </NavLink>
           </li>
-          <li
+          {user && (<li
             className=" p-2 pl-1 rounded-sm"
             onClick={() => toggleSidebar(false)}
           >
+            
             <NavLink
               to="/dashboard"
               className={({ isActive }) =>
@@ -69,7 +70,8 @@ function Layout() {
               {/* dashboard icon  */}
               <i className="ri-dashboard-2-line"></i> Dashboard{" "}
             </NavLink>
-          </li>
+          </li>)}
+          
           <li
             className="p-2 pl-1 rounded-sm"
             onClick={() => toggleSidebar(false)}
@@ -107,7 +109,16 @@ function Layout() {
 
           {/* login signup button  */}
           {user ? (
-            <> <button onClick={handleLogout} className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md"> Logout </button></>
+            <>
+              {" "}
+              <button
+                onClick={handleLogout}
+                className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md"
+              >
+                {" "}
+                Logout{" "}
+              </button>
+            </>
           ) : (
             <div className="flex gap-4 list-none border-purple-600 border-2 rounded-md lg:p-3 p-1 py-2 lg:pl-5 pl-2">
               <li>
@@ -126,8 +137,9 @@ function Layout() {
             </div>
           )}
         </div>
-
-        <Outlet />
+        <div className="bg-purple-100">
+          <Outlet />
+        </div>
       </div>
     </div>
   );

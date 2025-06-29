@@ -6,6 +6,7 @@ const AuthContext = createContext()
 
 export function AuthProvider({children}) {
     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     useEffect(()=>{
         const token  = localStorage.getItem("authToken")
@@ -13,6 +14,7 @@ export function AuthProvider({children}) {
             setUser({token })// optionally decode token if needed
             axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
         }
+        setLoading(false)
     },[])
 
     const login = (token) =>{
@@ -29,7 +31,7 @@ export function AuthProvider({children}) {
     } 
 
   return (
-    <AuthContext.Provider value={{user, login, logout}}>
+    <AuthContext.Provider value={{user, login, logout, loading}}>
         {children}
     </AuthContext.Provider>
   )
