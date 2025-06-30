@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../api/axiosInstance";
+import { useAuth } from "../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
   const [formData, setFormData] = useState({
@@ -8,7 +10,18 @@ function CreatePost() {
     description: "",
     deadline: "",
   });
+
   const [priority, setPriority] = useState("medium");
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      toast.warning("You Must Looged in. to create Task");
+      navigate("/sign-in");
+    }
+  }, [user, navigate]); // when user changes it runs
+  if(!user) return null // wait untill user is fetching from localStorage
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,23 +58,23 @@ function CreatePost() {
       if (err.response) {
         console.log("📦 err.response.status:", err.response.status);
         console.log("📩 err.response.data:", err.response.data);
-      }
-      else{
-        console.log("No response received from backend! ",err.message);        
+      } else {
+        console.log("No response received from backend! ", err.message);
       }
       const msg = err?.response?.data?.message || "Error while creating task!";
       toast.error(msg);
     }
   };
-  
+
   return (
     <div className="w-full bg-purple-100 lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 overflow-hidden">
-    
       <form
         onSubmit={handleSubmit}
         className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Create Your Task</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Create Your Task
+        </h2>
 
         {/* {error && <p className="text-red-600 mb-4">{error}</p>} */}
 

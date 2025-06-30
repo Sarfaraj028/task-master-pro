@@ -81,10 +81,9 @@ function Dashboard() {
   const [priority, setPriority] = useState("all");
   const [status, setStatus] = useState("all");
 
-  // if(loading) return <p>Laoding...</p>
+  
   useEffect(() => {
-    
-    // if(loading) return
+    if(loading) return
     const fetchApi = async () => {
       try {
         const queryParams = new URLSearchParams();
@@ -101,13 +100,13 @@ function Dashboard() {
       }
     };
     if (!user) {
-      toast.warning("Login First");
+      toast.warning("You Must Logged in to Access Dashboard!");
       navigate("/sign-in");
       return;
     }else{
       fetchApi();
     }
-  }, [user, priority, status]); // Runs whenever filter changes
+  }, [loading, user, priority, status]); // Runs whenever filter changes
 
   return (
     <main className="bg-purple-100">

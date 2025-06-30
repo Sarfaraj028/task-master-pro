@@ -20,7 +20,7 @@ function Layout() {
     setIsVisible(visible);
   };
   return (
-    <div className="flex">
+    <div className="flex ">
       {/* side bar  */}
       <nav
         className={`w-80 bg-purple-200 pl-8 pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
@@ -56,36 +56,38 @@ function Layout() {
               <i className="ri-home-4-line"></i> Home
             </NavLink>
           </li>
-          {user && (<li
-            className=" p-2 pl-1 rounded-sm"
-            onClick={() => toggleSidebar(false)}
-          >
-            
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
-              }
+          {user && (
+            <li
+              className=" p-2 pl-1 rounded-sm"
+              onClick={() => toggleSidebar(false)}
             >
-              {/* dashboard icon  */}
-              <i className="ri-dashboard-2-line"></i> Dashboard{" "}
-            </NavLink>
-          </li>)}
-          
-          <li
-            className="p-2 pl-1 rounded-sm"
-            onClick={() => toggleSidebar(false)}
-          >
-            <NavLink
-              to="/create"
-              className={({ isActive }) =>
-                isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
-              }
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
+                }
+              >
+                {/* dashboard icon  */}
+                <i className="ri-dashboard-2-line"></i> Dashboard{" "}
+              </NavLink>
+            </li>
+          )}
+          {user && (
+            <li
+              className="p-2 pl-1 rounded-sm"
+              onClick={() => toggleSidebar(false)}
             >
-              {/* plus icon  */}
-              <i className="ri-add-circle-line"></i> Add Task
-            </NavLink>
-          </li>
+              <NavLink
+                to="/create"
+                className={({ isActive }) =>
+                  isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
+                }
+              >
+                {/* plus icon  */}
+                <i className="ri-add-circle-line"></i> Add Task
+              </NavLink>
+            </li>
+          )}
         </ul>
       </nav>
       {/* right content top emnu + actual content  */}
