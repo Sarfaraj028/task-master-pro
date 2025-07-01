@@ -26,7 +26,7 @@
 //         toast.error(msg)
 //       }
 //     }; if(!user){
-//       toast.warning("Login First"); 
+//       toast.warning("Login First");
 //       navigate("/sign-in")
 //       return
 //     }else fetchApi()
@@ -65,7 +65,6 @@
 
 // export default Dashboard;
 
-
 import React, { useEffect, useState } from "react";
 import TaskCard from "../components/TaskCard";
 import axiosInstance from "../api/axiosInstance";
@@ -81,20 +80,22 @@ function Dashboard() {
   const [priority, setPriority] = useState("all");
   const [status, setStatus] = useState("all");
 
-  
   useEffect(() => {
-    if(loading) return
+    if (loading) return;
     const fetchApi = async () => {
       try {
         const queryParams = new URLSearchParams();
         if (priority !== "all") queryParams.append("priority", priority);
         if (status !== "all") queryParams.append("status", status);
 
-        const { data } = await axiosInstance.get(`/task?${queryParams.toString()}`);
+        const { data } = await axiosInstance.get(
+          `/task?${queryParams.toString()}`
+        );
         setTasks(data.tasks);
       } catch (err) {
-        setTasks([])
-        const msg = err?.response?.data?.message || "Error while fetching tasks!";
+        setTasks([]);
+        const msg =
+          err?.response?.data?.message || "Error while fetching tasks!";
         toast.error(msg);
         console.error("Error while fetching:", err);
       }
@@ -103,7 +104,7 @@ function Dashboard() {
       toast.warning("You Must Logged in to Access Dashboard!");
       navigate("/sign-in");
       return;
-    }else{
+    } else {
       fetchApi();
     }
   }, [loading, user, priority, status]); // Runs whenever filter changes
@@ -111,6 +112,18 @@ function Dashboard() {
   return (
     <main className="bg-purple-100">
       <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col items-start p-5 md:pr-10 overflow-hidden md:pl-9 pl-3 pr-3">
+        {/* User  */}
+        <div className="w-full flex flex-col items-end">
+          <p className="uppercase text-3xl font-semibold bg-purple-500 text-white p-2 px-4 rounded-4xl">
+            {tasks[0]?.user?.name.slice(0,1)}
+          </p>
+          {/* <p className="uppercase text-lg font-semibold">
+            {tasks[0]?.user?.name}
+          </p> */}
+          <p className="">
+            {tasks[0]?.user?.email}
+          </p>
+        </div>
         <h2 className="text-3xl font-semibold mb-6">Task Lists</h2>
 
         <div className="mb-6 flex flex-wrap gap-4">
@@ -148,6 +161,7 @@ function Dashboard() {
           tasks.map((task) => (
             <TaskCard
               key={task._id}
+              id={task._id}
               title={task.title}
               status={task.status}
               deadline={task.deadline}

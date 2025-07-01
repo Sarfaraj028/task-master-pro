@@ -10,6 +10,7 @@ import CreatePost from "./components/Create";
 import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { AuthProvider } from "./context/authContext";
+import Edit from "./pages/Edit";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/sign-up" element={<Signup />} />
               <Route path="/sign-in" element={<SignIn />} />
               <Route path="/create" element={<CreatePost />} />
+              <Route path="/edit/:taskId" element={<Edit />} />
               <Route path="/*" element={<NoPage />} />
             </Route>
           </Routes>

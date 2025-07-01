@@ -35,7 +35,7 @@ export const getTask = asyncHandler(async(req, res, next) =>{
     if(priority) queryObj.priority = priority
 
     console.log(queryObj)
-    const tasks = await Task.find(queryObj)
+    const tasks = await Task.find(queryObj).populate("user", "name email")
 
     if(!tasks || tasks.length === 0){
         return next(new ErrorHandler("No Tasks To Show!", 404))
@@ -88,6 +88,22 @@ export const deleteAllTasks = asyncHandler(async(req, res, next) =>{
         message: "All Tasks Deleted!"
     })
 })
+
+//get Single task to update 
+export const getSingleTask = asyncHandler(async (req, res, next) => {
+  const task = await Task.findOne({
+    _id: req.params.id,
+    user: req.user._id, // 🛡️ Secure: Only fetch if owned by this user
+  });
+
+  if (!task) return next(new ErrorHandler("Task not found!", 404));
+
+  res.status(200).json({
+    success: true,
+    task,
+  });
+});
+
 
 // update task
 export const updateTask = asyncHandler(async(req, res, next) =>{

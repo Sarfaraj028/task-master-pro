@@ -31,12 +31,13 @@ app.use("/api/user/", userRoute)
 //all tasks routes
 app.use("/api/task", apiRoute)
 
+//global Error handler
+app.use(errorMiddleware)
+
 // page not found
 app.use((req, res) =>{
     res.status(404).json({message: "Page Not Found 😢"})
 })
-//global Error handler
-app.use(errorMiddleware)
 
 app.listen(PORT, ()=>{
     console.log("App is running on the",PORT);
