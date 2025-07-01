@@ -115,10 +115,9 @@ function Layout() {
               {" "}
               <button
                 onClick={handleLogout}
-                className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md"
+                className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md cursor-pointer"
               >
-                {" "}
-                Logout{" "}
+                Logout
               </button>
             </>
           ) : (
