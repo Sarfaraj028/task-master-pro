@@ -17,7 +17,7 @@ function Edit() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { taskId } = useParams(); // 🆔 get taskId from URL
-  const errorShown = useRef(false)
+  const errorShown = useRef(false);
 
   // 🔄 effect for auth check
   useEffect(() => {
@@ -40,9 +40,13 @@ function Edit() {
         console.log(user, loading);
         console.log("data before set" + title);
 
-        setFormData({ title, description: description ? description : "", deadline: deadline ? deadline.split("T")[0] : '' });
+        setFormData({
+          title,
+          description: description ? description : "",
+          deadline: deadline ? deadline.split("T")[0] : "",
+        });
         setPriority(priority);
-        setStatus(status)
+        setStatus(status);
         console.log("data after set " + title);
         console.log("end of try" + taskId);
       } catch (err) {
@@ -70,16 +74,19 @@ function Edit() {
     if (!title) return toast.warning("Title is required!");
 
     try {
-      const { data } = await axiosInstance.put(`/task/edit/${taskId}`, {
+      const { data } = await axiosInstance.patch(`/task/edit/${taskId}`, {
         title,
         description,
         deadline,
         priority,
+        status,
       });
-
-      toast.success(`✅ ${data.task.title} updated successfully!`);
+      console.log("after patch method: " + title);
+      toast.success(`Task updated successfully!`);
       navigate("/dashboard");
     } catch (err) {
+      console.log("❌ Error updating task:", err);
+      console.log("❌ Full error response:", err.response);
       const msg = err?.response?.data?.message || "Update failed!";
       toast.error(msg);
     }
@@ -126,7 +133,7 @@ function Edit() {
           <option value="medium">medium</option>
           <option value="high">high</option>
         </select>
-         {/* status  */}
+        {/* status  */}
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
