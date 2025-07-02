@@ -23,12 +23,12 @@ function Layout() {
     <div className="flex ">
       {/* side bar  */}
       <nav
-        className={`w-80 bg-purple-200 pl-8 pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
+        className={`lg:w-80 w-64 bg-purple-200  pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
           ${
             isVisible ? "absolute left-0 z-10 " : "absolute -left-[380px]"
           } lg:left-0`}
       >
-        <li className="list-none text-2xl mb-5 border-b-2 border-purple-500 pb-3.5">
+        <li className="list-none text-2xl pl-3 lg:pl-8 mb-5 border-b-2 border-purple-500 pb-3.5">
           {/* task master icon  */}
           <i className="ri-todo-line text-purple-600"></i>{" "}
           <Link to="/" className="font-bold p-2">
@@ -44,11 +44,11 @@ function Layout() {
           <i className="ri-close-line"></i>
         </p>
         <ul className="z-10">
-          <li className="p-3 pl-1 rounded-sm">
+          <li className="w-full pl-3 lg:pl-8 rounded-sm mb-3">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
+                isActive ? "bg-purple-50 w-full block p-1 pr-20" : ""
               }
               onClick={() => toggleSidebar(false)}
             >
@@ -58,13 +58,13 @@ function Layout() {
           </li>
           {user && (
             <li
-              className=" p-2 pl-1 rounded-sm"
+              className="pl-3 lg:pl-8 rounded-sm mb-3"
               onClick={() => toggleSidebar(false)}
             >
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
+                  isActive ? "bg-purple-100 p-1 w-full block pr-20" : ""
                 }
               >
                 {/* dashboard icon  */}
@@ -74,13 +74,13 @@ function Layout() {
           )}
           {user && (
             <li
-              className="p-2 pl-1 rounded-sm"
+              className="pl-3 lg:pl-8 rounded-sm mb-3"
               onClick={() => toggleSidebar(false)}
             >
               <NavLink
                 to="/create"
                 className={({ isActive }) =>
-                  isActive ? "bg-purple-400 p-1 py-3 pr-20 rounded-md" : ""
+                  isActive ? "bg-purple-100 p-1 w-full block pr-20" : ""
                 }
               >
                 {/* plus icon  */}

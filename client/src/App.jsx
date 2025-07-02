@@ -11,6 +11,7 @@ import Signup from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { AuthProvider } from "./context/authContext";
 import Edit from "./pages/Edit";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (
@@ -20,10 +21,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />} className="float-end">
               <Route index element={<Home />} />
-              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />  } />
               <Route path="/sign-up" element={<Signup />} />
               <Route path="/sign-in" element={<SignIn />} />
-              <Route path="/create" element={<CreatePost />} />
+              <Route path="/create" element={<ProtectedRoute />}>
+                <Route index element={<CreatePost />} />
+              </Route>
               <Route path="/edit/:taskId" element={<Edit />} />
               <Route path="/*" element={<NoPage />} />
             </Route>

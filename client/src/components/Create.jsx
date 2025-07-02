@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../api/axiosInstance";
-import { useAuth } from "../context/authContext";
-import { useNavigate } from "react-router-dom";
+// import { useAuth } from "../context/authContext";
+// import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
   const [formData, setFormData] = useState({
@@ -10,18 +10,21 @@ function CreatePost() {
     description: "",
     deadline: "",
   });
+  // const hasWarned = useRef(false)
 
   const [priority, setPriority] = useState("medium");
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  // const { user, loading } = useAuth();
+  // const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      toast.warning("You Must Looged in. to create Task");
-      navigate("/sign-in");
-    }
-  }, [user, navigate]); // when user changes it runs
-  if(!user) return null // wait untill user is fetching from localStorage
+  // useEffect(() => {
+  //   if(loading) return
+  //   if (!user && !hasWarned) {
+  //     toast.warning("You Must Looged in. to create Task");
+  //     navigate("/sign-in");
+  //     hasWarned.current = true
+  //   }
+  // }, [user, navigate, loading]); // when user changes it runs
+  // if(!user) return null // wait untill user is fetching from localStorage
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -94,7 +97,7 @@ function CreatePost() {
           autoComplete="off"
           value={formData.description}
           onChange={handleChange}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
+          className="relative w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
         />
 
         <select

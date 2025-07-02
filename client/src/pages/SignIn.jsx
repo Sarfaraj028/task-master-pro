@@ -33,13 +33,13 @@ function SignIn() {
       });
 
       // Store Token 
-      if(data.token){
-        localStorage.setItem("authToken", data.token)
+      // if(data.token){
+      //   localStorage.setItem("authToken", data.token)
 
-        //optional: set axios default header for futire calls
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.token}`
+      //   //optional: set axios default header for futire calls
+      //   axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${data.token}`
 
-      }
+      // }
       //store token in login
       login(data.token)
 

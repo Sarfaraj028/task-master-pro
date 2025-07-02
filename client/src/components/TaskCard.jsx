@@ -41,13 +41,13 @@ function TaskCard({ title, status, deadline, priority, id, onDelete }) {
         {/* task edit button  */}
         <li className="list-none inline">
           <NavLink to={`/edit/${id}`}>
-            <i className="ri-pencil-line text-xl p-4 cursor-pointer"></i>
+            <i className="ri-pencil-line text-xl p-4 text-purple-600 hover:text-purple-700 cursor-pointer"></i>
           </NavLink>
         </li>
         {/* task delete button  */}
         <i
           onClick={() => setShowModal(true)}
-          className="ri-delete-bin-6-line text-xl cursor-pointer"
+          className="ri-delete-bin-6-line text-xl text-red-600 hover:text-red-700 cursor-pointer"
         ></i>
       </div>
       {/* delete modal  */}

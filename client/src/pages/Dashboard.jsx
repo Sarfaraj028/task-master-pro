@@ -4,8 +4,10 @@ import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
+import ConfirmModal from "../components/ConfirmModal";
 
 function Dashboard() {
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { user, loading } = useAuth();
 
@@ -13,9 +15,30 @@ function Dashboard() {
   const [priority, setPriority] = useState("all");
   const [status, setStatus] = useState("all");
 
-  // function to delete task from the state
+  // function to delete Single task from the state
   function handleDeletedTask(deletedId) {
     setTasks((keepTasks) => keepTasks.filter((task) => task._id !== deletedId));
+  }
+
+  //delete all tasks
+  async function deleteAll() {
+    if(tasks.length === 0){
+      console.log("No Tasks to Delete!");
+      toast.info("No Tasks to Delete!")
+      setShowModal(false)
+      return
+    }
+    try{
+      await axiosInstance.delete("/task/delete-all")
+      setTasks([]);
+      setShowModal(false)
+      toast.success("All Tasks Delted Successfully!")
+    }
+    catch(err){
+      console.log("ERROR : "+err?.data?.response.message || "Failed to delete tasks!" )
+      setShowModal(false)
+      toast.error("Error while deleting tasks!")
+    }
   }
 
   useEffect(() => {
@@ -57,12 +80,28 @@ function Dashboard() {
               {tasks[0]?.user?.name.slice(0, 1)}
             </p>
             {/* <p className="uppercase text-lg font-semibold">
-            {tasks[0]?.user?.name}
+            {tasks[0]?.user?.name} 
           </p> */}
             <p className="">{tasks[0]?.user?.email}</p>
           </div>
         )}
-        <h2 className="text-3xl font-semibold mb-6">Task Lists</h2>
+        <div className="w-full flex justify-between items-center pb-6 pt-2">
+          <h2 className="text-3xl font-semibold ">Task Lists</h2>
+          <p
+            onClick={() => setShowModal(true)}
+            className="text-red-600 font-semibold border-1 border-red-300 py-1 px-2 rounded-md hover:bg-red-600 transition ease-in-out duration-200 cursor-pointer hover:text-white"
+          >
+            Delete All
+          </p>
+        </div>
+        {/* delete modal  */}
+        {showModal && (
+          <ConfirmModal
+            message="Are you sure, All Tasks will be deleted!"
+            onConfirm={deleteAll}
+            onCancel={() => setShowModal(false)}
+          />
+        )}
 
         <div className="mb-6 flex flex-wrap gap-4">
           <div>
