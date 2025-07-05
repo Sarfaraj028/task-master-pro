@@ -4,7 +4,7 @@ import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
 
-function TaskCard({ title, status, deadline, priority, id, onDelete }) {
+function TaskCard({ title, status, deadline, priority, description, id, onDelete, openTaskWithId, setOpenTaskWithId }) {
   const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async () => {
@@ -21,7 +21,9 @@ function TaskCard({ title, status, deadline, priority, id, onDelete }) {
     setShowModal(false);
   };
   return (
-    <div className="w-full flex justify-between items-center p-3 px-4 rounded-md mb-4 shadow-lg bg-white shadow-purple-200 relative">
+    <section className={`task-container w-full ${openTaskWithId === id ? 'max-h-[1000px]' : 'max-h-17' } overflow-hidden bg-white rounded-md mb-4 shadow-lg transition-all ease-in-out duration-300 shadow-purple-200 p-3 px-4 pt-0`}>
+     {/* task head  */}
+    <div onClick={()=> setOpenTaskWithId(openTaskWithId === id ? null : id)} className="task-head w-full max-h-24 flex justify-between py-3 items-center cursor-pointer relative">
       <div>
         <h3 className="text-lg">{title}</h3>
         <p className="text-xs">{deadline ? deadline.slice(0, 10) : ""}</p>
@@ -59,6 +61,9 @@ function TaskCard({ title, status, deadline, priority, id, onDelete }) {
         />
       )}
     </div>
+    {/* task description  */}
+    <div className="task-desc pt-3 border-t-2 border-purple-600 mt-1">{description}</div>
+    </section>
   );
 }
 

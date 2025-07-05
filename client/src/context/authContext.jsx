@@ -1,40 +1,56 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import axiosInstance from '../api/axiosInstance'
+import React, { createContext, useContext, useEffect, useState } from "react";
+import axiosInstance from "../api/axiosInstance";
 
+const AuthContext = createContext();
 
-const AuthContext = createContext()
+export function AuthProvider({ children }) {
+  const [userToken, setUserToken] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState([]);
 
-export function AuthProvider({children}) {
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
-
-    useEffect(()=>{
-        const token  = localStorage.getItem("authToken")
-        if(token){
-            setUser({token })// optionally decode token if needed
-            axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
-        }
-        setLoading(false)
-    },[])
-
-    const login = (token) =>{
-        localStorage.setItem("authToken", token)
-        axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`
-        setUser({token})
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setUserToken({ token }); // optionally decode token if needed
+      axiosInstance.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${token}`;
+        fetchUser()
     }
-    const logout = () =>{
-        localStorage.removeItem("authToken")
-        delete axiosInstance.defaults.headers.common["Authorization"]
-        setUser(null)
-        console.log("token deleted!")
-        
-    } 
+    setLoading(false);
+  },[]);
+
+  async function fetchUser() {
+      try {
+        setLoading(true)
+        const {data} = await axiosInstance.get("/user/me");
+        setUser(data.user)
+      } catch (err) {
+        console.log("Error while fetching User", err.message);
+        logout()
+      }finally{
+        setLoading(false)
+      }
+    }
+
+  const login = (token) => {
+    localStorage.setItem("authToken", token);
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    setUserToken({ token });
+    fetchUser()
+  };
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    delete axiosInstance.defaults.headers.common["Authorization"];
+    setUserToken(null);
+    console.log("token deleted!");
+  };
 
   return (
-    <AuthContext.Provider value={{user, login, logout, loading}}>
-        {children}
+    <AuthContext.Provider value={{ userToken, login, logout, loading, user }}>
+      {children}
     </AuthContext.Provider>
-  )
+  );
 }
 
-export const useAuth = () => useContext(AuthContext)
+export const useAuth = () => useContext(AuthContext);

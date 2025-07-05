@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import TaskCard from "../components/TaskCard";
 import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-toastify";
@@ -8,12 +8,15 @@ import ConfirmModal from "../components/ConfirmModal";
 
 function Dashboard() {
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate();
-  const { user, loading } = useAuth();
-
   const [tasks, setTasks] = useState([]);
   const [priority, setPriority] = useState("all");
   const [status, setStatus] = useState("all");
+  const [openTaskWithId, setOpenTaskWithId] = useState(null)
+
+  const shownError = useRef(false)
+  const navigate = useNavigate();
+  const { userToken, loading, user } = useAuth();
+
 
   // function to delete Single task from the state
   function handleDeletedTask(deletedId) {
@@ -41,7 +44,7 @@ function Dashboard() {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     if (loading) return;
     const fetchApi = async () => {
       try {
@@ -54,45 +57,43 @@ function Dashboard() {
         );
         setTasks(data.tasks);
       } catch (err) {
-        setTasks([]);
         const msg =
           err?.response?.data?.message || "Error while fetching tasks!";
-        toast.error(msg);
-        console.error("Error while fetching:", err);
+        if(shownError.current === false){
+          toast.error(msg);
+          console.error("Error while fetching:", err);
+          setTasks([]);
+          shownError.current = true 
+        }
       }
     };
-    if (!user) {
+    if (!userToken) {
       toast.warning("You Must Logged in to Access Dashboard!");
       navigate("/sign-in");
       return;
     } else {
       fetchApi();
     }
-  }, [loading, user, priority, status]); // Runs whenever filter changes
+  }, [loading, userToken, priority, status]); // Runs whenever filter changes
 
   return (
     <main className="bg-purple-100">
       <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col items-start p-5 md:pr-10 overflow-hidden md:pl-9 pl-3 pr-3">
         {/* User  */}
-        {tasks.length > 0 && (
           <div className="w-full flex flex-col items-end">
             <p className="uppercase text-3xl font-semibold bg-purple-500 text-white p-2 px-4 rounded-4xl">
-              {tasks[0]?.user?.name.slice(0, 1)}
+              {user?.name?.slice(0, 1)}
             </p>
-            {/* <p className="uppercase text-lg font-semibold">
-            {tasks[0]?.user?.name} 
-          </p> */}
-            <p className="">{tasks[0]?.user?.email}</p>
+            <p className="">{user.email}</p> 
           </div>
-        )}
         <div className="w-full flex justify-between items-center pb-6 pt-2">
           <h2 className="text-3xl font-semibold ">Task Lists</h2>
-          <p
+          {tasks.length > 0 && <p
             onClick={() => setShowModal(true)}
             className="text-red-600 font-semibold border-1 border-red-300 py-1 px-2 rounded-md hover:bg-red-600 transition ease-in-out duration-200 cursor-pointer hover:text-white"
           >
             Delete All
-          </p>
+          </p>}
         </div>
         {/* delete modal  */}
         {showModal && (
@@ -140,13 +141,16 @@ function Dashboard() {
               key={task._id}
               id={task._id}
               title={task.title}
+              description={task.description}
               status={task.status}
               deadline={task.deadline}
               priority={task.priority}
               onDelete={handleDeletedTask}
+              openTaskWithId={openTaskWithId}
+              setOpenTaskWithId={setOpenTaskWithId}
             />
           ))
-        ) : (
+        ) : ( 
           <p className="mt-4 mx-auto">No Tasks to Show</p>
         )}
       </div>

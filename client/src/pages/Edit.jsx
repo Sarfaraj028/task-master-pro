@@ -14,7 +14,7 @@ function Edit() {
   const [priority, setPriority] = useState("medium");
   const [status, setStatus] = useState("pending");
 
-  const { user, loading } = useAuth();
+  const { userToken, loading } = useAuth();
   const navigate = useNavigate();
   const { taskId } = useParams(); // 🆔 get taskId from URL
   const errorShown = useRef(false);
@@ -22,14 +22,14 @@ function Edit() {
   // 🔄 effect for auth check
   useEffect(() => {
     if (loading) return; // wait for loading
-    if (!user) {
+    if (!userToken) {
       toast.warning("You must be logged in to edit tasks");
       navigate("/sign-in");
     }
-  }, [loading, user, navigate]);
+  }, [loading, userToken, navigate]);
 
   useEffect(() => {
-    if (!taskId || !user || loading) return;
+    if (!taskId || !userToken || loading) return;
 
     const fetchTask = async () => {
       try {
@@ -37,7 +37,7 @@ function Edit() {
         console.log("data before set " + data.task.status);
         const { title, description, deadline, priority, status } = data.task;
         console.log(taskId);
-        console.log(user, loading);
+        console.log(userToken, loading);
         console.log("data before set" + title);
 
         setFormData({
@@ -60,7 +60,7 @@ function Edit() {
     };
 
     fetchTask();
-  }, [taskId, user, loading, navigate]);
+  }, [taskId, userToken, loading, navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -92,7 +92,7 @@ function Edit() {
     }
   };
 
-  if (!user) return null;
+  if (!userToken) return null;
 
   return (
     <div className="w-full bg-purple-100 lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 overflow-hidden">

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 function Layout() {
   const [isVisible, setIsVisible] = useState(false);
-  const { user, logout } = useAuth();
+  const { userToken, logout } = useAuth();
   const navigate = useNavigate();
 
   //handleLogout
@@ -56,7 +56,7 @@ function Layout() {
               <i className="ri-home-4-line"></i> Home
             </NavLink>
           </li>
-          {user && (
+          {userToken && (
             <li
               className="pl-3 lg:pl-8 rounded-sm mb-3"
               onClick={() => toggleSidebar(false)}
@@ -72,7 +72,7 @@ function Layout() {
               </NavLink>
             </li>
           )}
-          {user && (
+          {userToken && (
             <li
               className="pl-3 lg:pl-8 rounded-sm mb-3"
               onClick={() => toggleSidebar(false)}
@@ -110,7 +110,7 @@ function Layout() {
           </li>
 
           {/* login signup button  */}
-          {user ? (
+          {userToken ? (
             <>
               {" "}
               <button

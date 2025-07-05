@@ -1,5 +1,4 @@
 import React from "react";
-
 function ConfirmModal({ message, onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)] bg-opacity-10 flex items-center justify-center z-50">
