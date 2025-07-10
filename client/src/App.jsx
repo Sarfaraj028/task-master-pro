@@ -12,6 +12,7 @@ import SignIn from "./pages/SignIn";
 import { AuthProvider } from "./context/authContext";
 import Edit from "./pages/Edit";
 import ProtectedRoute from "./components/ProtectedRoutes";
+import VerifyEmail from "./pages/VerifyEmail";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route index element={<CreatePost />} />
               </Route>
               <Route path="/edit/:taskId" element={<Edit />} />
+              <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/*" element={<NoPage />} />
             </Route>
           </Routes>

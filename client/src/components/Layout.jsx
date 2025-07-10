@@ -20,12 +20,12 @@ function Layout() {
     setIsVisible(visible);
   };
   return (
-    <div className="flex ">
+    <div className="w-full flex bg-purple-100">
       {/* side bar  */}
       <nav
-        className={`lg:w-80 w-64 bg-purple-200  pt-4 h-screen transition-all duration-500 ease-in-out lg:relative 
+        className={`w-64 bg-purple-200  pt-4 h-screen transition-all duration-500 ease-in-out z-30 lg:fixed
           ${
-            isVisible ? "absolute left-0 z-10 " : "absolute -left-[380px]"
+            isVisible ? "fixed left-0 z-30" : "fixed -left-[380px]"
           } lg:left-0`}
       >
         <li className="list-none text-2xl pl-3 lg:pl-8 mb-5 border-b-2 border-purple-500 pb-3.5">
@@ -48,7 +48,7 @@ function Layout() {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                isActive ? "bg-purple-50 w-full block p-1 pr-20" : ""
+                isActive ? "bg-purple-100 w-full block p-1 pr-20" : ""
               }
               onClick={() => toggleSidebar(false)}
             >
@@ -91,54 +91,57 @@ function Layout() {
         </ul>
       </nav>
       {/* right content top emnu + actual content  */}
-      <div className="w-full bg-purple-200 transition-all duration-600 ease-in-out">
+      <div className="relative w-full bg-purple-200 transition-all duration-600 ease-in-out">
         {/* top menu */}
-        <div className="flex h-16 justify-between items-center p-2 md:pr-10 pr-3 border-b-purple-600 border-b-2 ">
-          {/* navigation show button  */}
-          <a className="top-4 my-6 md:ml-6 ml-0">
-            {" "}
-            {/* opnen nav icon */}
-            <i
-              className="ri-menu-unfold-fill text-xl font-semibold md:text-3xl lg:opacity-0 opacity-100 text-purple-600 hover:text-purple-800 cursor-pointer"
-              onClick={() => toggleSidebar(true)}
-            />
-          </a>
-          <li className="list-none text-xl ml-16 lg:opacity-0 opacity-100 ">
-            <Link to="/" className="font-bold ">
-              Task Master
-            </Link>
-          </li>
-
-          {/* login signup button  */}
-          {userToken ? (
-            <>
+        <header className="sticky top-0 w-full bg-purple-200 z-20">
+          <div className="flex h-16 justify-between items-center p-2 md:pr-10 pr-3 border-b-purple-600 border-b-2 ">
+            {/* navigation show button  */}
+            <a className="top-4 my-6 md:ml-6 ml-0">
               {" "}
-              <button
-                onClick={handleLogout}
-                className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md cursor-pointer"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <div className="flex gap-4 list-none border-purple-600 border-2 rounded-md lg:p-3 p-1 py-2 lg:pl-5 pl-2">
-              <li>
-                <Link to="/sign-in" className="md:text-base text-sm">
-                  SignIn
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/sign-up"
-                  className="bg-purple-600 hover:bg-purple-700 p-2  text-sm md:text-base rounded-md text-white"
+              {/* opnen nav icon */}
+              <i
+                className="ri-menu-unfold-fill text-xl font-semibold md:text-3xl lg:opacity-0 opacity-100 text-purple-600 hover:text-purple-800 cursor-pointer"
+                onClick={() => toggleSidebar(true)}
+              />
+            </a>
+            <li className="list-none text-xl ml-16 lg:opacity-0 opacity-100 ">
+              <Link to="/" className="font-bold ">
+                Task Master
+              </Link>
+            </li>
+
+            {/* login signup button  */}
+            {userToken ? (
+              <>
+                {" "}
+                <button
+                  onClick={handleLogout}
+                  className="p-1 px-3 bg-purple-600 hover:bg-purple-700 text-white rounded-md cursor-pointer"
                 >
-                  SignUp
-                </Link>
-              </li>
-            </div>
-          )}
-        </div>
-        <div className="bg-purple-100">
+                  Logout
+                </button>
+              </>
+            ) : (
+              <div className="flex gap-4 list-none border-purple-600 border-2 rounded-md lg:p-3 p-1 py-2 lg:pl-5 pl-2">
+                <li>
+                  <Link to="/sign-in" className="md:text-base text-sm">
+                    SignIn
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/sign-up"
+                    className="bg-purple-600 hover:bg-purple-700 p-2  text-sm md:text-base rounded-md text-white"
+                  >
+                    SignUp
+                  </Link>
+                </li>
+              </div>
+            )}
+          </div>
+        </header>
+
+        <div className="lg:ml-64 bg-purple-100">
           <Outlet />
         </div>
       </div>

@@ -147,6 +147,8 @@ function Edit() {
         <input
           type="date"
           name="deadline"
+          min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]}
+          default={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]}
           placeholder="Enter Deadline"
           value={formData.deadline}
           onChange={handleChange}

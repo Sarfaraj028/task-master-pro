@@ -5,6 +5,7 @@ import apiRoute from "./routes/apiRoutes.js"
 import { connectDB } from "./db/db.js"
 import { errorMiddleware } from "./middlewares/errorMiddleware.js"
 import userRoute from "./routes/userRoute.js"
+// import { User } from "./models/userModel.js"
 
 const app = express()
 dotenv.config()
@@ -45,3 +46,10 @@ app.listen(PORT, ()=>{
 })
 
 // const email = req.body.email.replace(/\s+/g, '').toLowerCase(); // Removes ALL spaces
+
+// delete all 
+// const deleteAllUsers = async () => {
+//     await Task.deleteMany({})
+//     console.log("All task Deleted!")
+// }
+// deleteAllUsers()

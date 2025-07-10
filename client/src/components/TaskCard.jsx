@@ -4,7 +4,17 @@ import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
 
-function TaskCard({ title, status, deadline, priority, description, id, onDelete, openTaskWithId, setOpenTaskWithId }) {
+function TaskCard({
+  title,
+  status,
+  deadline,
+  priority,
+  description,
+  id,
+  onDelete,
+  openTaskWithId,
+  setOpenTaskWithId,
+}) {
   const [showModal, setShowModal] = useState(false);
 
   const handleDelete = async () => {
@@ -21,48 +31,57 @@ function TaskCard({ title, status, deadline, priority, description, id, onDelete
     setShowModal(false);
   };
   return (
-    <section className={`task-container w-full ${openTaskWithId === id ? 'max-h-[1000px]' : 'max-h-17' } overflow-hidden bg-white rounded-md mb-4 shadow-lg transition-all ease-in-out duration-300 shadow-purple-200 p-3 px-4 pt-0`}>
-     {/* task head  */}
-    <div onClick={()=> setOpenTaskWithId(openTaskWithId === id ? null : id)} className="task-head w-full max-h-24 flex justify-between py-3 items-center cursor-pointer relative">
-      <div>
-        <h3 className="text-lg">{title}</h3>
-        <p className="text-xs">{deadline ? deadline.slice(0, 10) : ""}</p>
+    <section
+      className={`task-container w-full ${
+        openTaskWithId === id ? "max-h-[1000px]" : "max-h-17"
+      } overflow-hidden bg-white rounded-md mb-4 shadow-lg transition-all ease-in-out duration-300 shadow-purple-200 p-3 px-4 pt-0`}
+    >
+      {/* task head  */}
+      <div
+        onClick={() => setOpenTaskWithId(openTaskWithId === id ? null : id)}
+        className="task-head w-full max-h-24 flex justify-between py-3 items-center cursor-pointer relative"
+      >
+        <div>
+          <h3 className="text-lg">{title}</h3>
+          <p className="text-xs">Deadline : {deadline ? deadline.slice(0, 10) : ""}</p>
+        </div>
+        <div>
+          <span
+            className={` ${
+              status === "completed"
+                ? " bg-green-300"
+                : status === "in-progress"
+                ? "bg-orange-300"
+                : "bg-red-300"
+            }  p-1 px-3 rounded-md`}
+          >
+            {status}
+          </span>
+          {/* task edit button  */}
+          <li className="list-none inline">
+            <NavLink to={`/edit/${id}`}>
+              <i className="ri-pencil-line text-xl p-4 text-purple-600 hover:text-purple-700 cursor-pointer"></i>
+            </NavLink>
+          </li>
+          {/* task delete button  */}
+          <i
+            onClick={() => setShowModal(true)}
+            className="ri-delete-bin-6-line text-xl text-red-600 hover:text-red-700 cursor-pointer"
+          ></i>
+        </div>
+        {/* delete modal  */}
+        {showModal && (
+          <ConfirmModal
+            message="Are you sure, You Wanna delete the Task!"
+            onConfirm={handleDelete}
+            onCancel={() => setShowModal(false)}
+          />
+        )}
       </div>
-      <div>
-        <span
-          className={` ${
-            status === "completed"
-              ? " bg-green-300"
-              : status === "in-progress"
-              ? "bg-orange-300"
-              : "bg-red-300"
-          }  p-1 px-3 rounded-md`}
-        >
-          {status}
-        </span>
-        {/* task edit button  */}
-        <li className="list-none inline">
-          <NavLink to={`/edit/${id}`}>
-            <i className="ri-pencil-line text-xl p-4 text-purple-600 hover:text-purple-700 cursor-pointer"></i>
-          </NavLink>
-        </li>
-        {/* task delete button  */}
-        <i
-          onClick={() => setShowModal(true)}
-          className="ri-delete-bin-6-line text-xl text-red-600 hover:text-red-700 cursor-pointer"
-        ></i>
+      {/* task description  */}
+      <div className="task-desc pt-3 border-t-2 border-purple-200 mt-1">
+        {description}
       </div>
-      {/* delete modal  */}
-      {showModal && (
-        <ConfirmModal
-          message="Are you sure, You Wanna delete the Task!"
-          onConfirm={handleDelete}
-          onCancel={() => setShowModal(false)}
-        />
-      )}
-    </div>
-    {/* task description  */}
-    <div className="task-desc pt-3 border-t-2 border-purple-600 mt-1">{description}</div>
     </section>
   );
 }

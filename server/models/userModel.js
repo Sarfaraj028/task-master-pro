@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema({
         set: (value) => value.replace(/\s+/g, ""),
         validate: [validator.isEmail, "Please Provide a valid email!"]
     },
+    emailVerified: {
+        type: Boolean,
+        default: false,
+    },
     password: {
         type: String,
         required: [true, "Password is required!"],
@@ -28,6 +32,7 @@ const userSchema = mongoose.Schema({
     timestamps: true
 })
 
+// hash password 
 userSchema.pre("save", async function (next) {
     if(!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password, 10);
@@ -39,11 +44,12 @@ userSchema.methods.comparePassword = async function(password) {
     return await bcrypt.compare(password, this.password)
 }
 
-// create jsonWebToken
+// Generate jsonWebToken
 userSchema.methods.generateJWTToken = function () {
     return jwt.sign({_id: this._id}, process.env.JWT_SECRET, {
         expiresIn: "10d"
     })
 }
+
 
 export const User = mongoose.model("User", userSchema)

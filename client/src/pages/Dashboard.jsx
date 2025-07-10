@@ -77,8 +77,8 @@ function Dashboard() {
   }, [loading, userToken, priority, status]); // Runs whenever filter changes
 
   return (
-    <main className="bg-purple-100">
-      <div className="w-full lg:min-h-9/10 h-[90vh] relative flex flex-col items-start p-5 md:pr-10 overflow-hidden md:pl-9 pl-3 pr-3">
+    <main className="bg-purple-100 min-h-[90vh]">
+      <div className="w-full lg:min-h-[90vh] relative flex flex-col items-start p-5 md:pr-10 overflow-hidden md:pl-9 pl-3 pr-3">
         {/* User  */}
           <div className="w-full flex flex-col items-end">
             <p className="uppercase text-3xl font-semibold bg-purple-500 text-white p-2 px-4 rounded-4xl">

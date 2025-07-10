@@ -1,5 +1,6 @@
 import Task from "../models/taskModel.js"
 import { asyncHandler, ErrorHandler } from "../utils/asyncHandler.js"
+import { sendEmail } from "../utils/sendEmail.js";
 
 // task post
 export const createTask = asyncHandler( async (req, res, next) =>{
