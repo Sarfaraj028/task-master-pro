@@ -35,7 +35,7 @@ function Dashboard() {
       await axiosInstance.delete("/task/delete-all")
       setTasks([]);
       setShowModal(false)
-      toast.success("All Tasks Delted Successfully!")
+      toast.success("All Tasks Deleted Successfully!")
     }
     catch(err){
       console.log("ERROR : "+err?.data?.response.message || "Failed to delete tasks!" )
@@ -59,10 +59,10 @@ function Dashboard() {
       } catch (err) {
         const msg =
           err?.response?.data?.message || "Error while fetching tasks!";
+          setTasks([]);
         if(shownError.current === false){
           toast.error(msg);
           console.error("Error while fetching:", err);
-          setTasks([]);
           shownError.current = true 
         }
       }

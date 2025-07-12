@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import { useRef } from "react";
+import Heading from "../components/heading";
 
 function Edit() {
   const [formData, setFormData] = useState({
@@ -95,72 +96,90 @@ function Edit() {
   if (!userToken) return null;
 
   return (
-    <div className="w-full bg-purple-100 lg:min-h-9/10 h-[90vh] relative flex flex-col justify-center items-center p-5 overflow-hidden">
+    <div className="w-full bg-purple-100 min-h-[90vh] relative flex flex-col items-center md:p-5 p-1 overflow-hidden md:pt-5 pt-5">
       <form
         onSubmit={handleSubmit}
-        className="p-8 rounded-lg bg-transparent shadow-lg w-full max-w-md"
+        className="lg:p-8 md:p-3 p-2 lg:pt-3 md:pt-3 pt-3  rounded-lg bg-white shadow-lg w-full max-w-5xl"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
+        <Heading> 
           Update Your Task
-        </h2>
+        </Heading>
 
+        {/* task status, priority, deadline  */}
+        <div className="flex flex-wrap md:flex-nowrap gap-5 float-end mt-4">
+          {/* priority  */}
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="text-sm mb-4 p-2 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
+          >
+            <option value="low">low</option>
+            <option value="medium">medium</option>
+            <option value="high">high</option>
+          </select>
+          {/* status  */}
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className={`text-sm mb-4 p-1 focus:border-purple-700 outline-0  rounded-md ${status === "pending" ? "bg-red-300" : status === "completed" ? "bg-green-300" : "bg-orange-300"}`}
+          >
+            <option value="in-progress" className="bg-white">in-progress</option>
+            <option value="pending" className="bg-white">pending</option>
+            <option value="completed" className="bg-white">completed</option>
+          </select>
+
+          <input
+            type="date"
+            name="deadline"
+            min={
+              new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                .toISOString()
+                .split("T")[0]
+            }
+            default={
+              new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+                .toISOString()
+                .split("T")[0]
+            }
+            placeholder="Enter Deadline"
+            value={formData.deadline}
+            onChange={handleChange}
+            className="text-sm mb-4 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
+          />
+        </div>
+
+        {/* task title  */}
         <input
           type="text"
           name="title"
-          placeholder="Enter Task Title"
+          placeholder="Update Task Title"
           value={formData.title}
           onChange={handleChange}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
+          className="w-full font-bold text-lg mb-4 pt-3 p-2 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
         />
 
-        <input
+        {/* task description  */}
+        <textarea
           type="text"
           name="description"
-          placeholder="Enter Task Description"
+          rows={15}
+          placeholder="Start typing description here...."
           autoComplete="off"
           value={formData.description}
           onChange={handleChange}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-        />
-
-        {/* priority  */}
-        <select
-          value={priority}
-          onChange={(e) => setPriority(e.target.value)}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-        >
-          <option value="low">low</option>
-          <option value="medium">medium</option>
-          <option value="high">high</option>
-        </select>
-        {/* status  */}
-        <select
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-        >
-          <option value="in-progress">in-progress</option>
-          <option value="pending">pending</option>
-          <option value="completed">completed</option>
-        </select>
-
-        <input
-          type="date"
-          name="deadline"
-          min={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]}
-          default={new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]}
-          placeholder="Enter Deadline"
-          value={formData.deadline}
-          onChange={handleChange}
-          className="w-full mb-4 p-3 border-2 focus:border-purple-700 border-purple-400 outline-0 rounded"
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-purple-700 text-white py-3 rounded hover:bg-purple-800 transition"
-        >
-          Update Task
-        </button>
+          className="w-full mb-4 p-3  border-1 focus:border-purple-700 border-purple-300 bg-purple-50 outline-0 rounded"
+        > </textarea>
+        
+        {/* submit button  + Characters count  */}
+        <div className="w-full flex justify-between">
+          <p>Characters : {formData.description.length}</p>
+          <button
+            type="submit"
+            className="cursor-pointer bg-purple-700 text-white p-3 px-8 rounded hover:bg-purple-800 transition"
+          >
+            Update Task
+          </button>
+        </div>
       </form>
     </div>
   );
