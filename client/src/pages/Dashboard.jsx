@@ -11,12 +11,36 @@ function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [priority, setPriority] = useState("all");
   const [status, setStatus] = useState("all");
-  const [openTaskWithId, setOpenTaskWithId] = useState(null)
+  const [openTaskWithId, setOpenTaskWithId] = useState(null);
 
-  const shownError = useRef(false)
+  const shownError = useRef(false);
   const navigate = useNavigate();
   const { userToken, loading, user } = useAuth();
 
+  
+
+  // Function to parse description content
+  // const parseDescription = (description) => {
+  //   if (!description) return "";
+
+  //   try {
+  //     // Try to parse as JSON (for TipTap content)
+  //     const parsed = JSON.parse(description);
+      
+  //     // If it's TipTap JSON, extract plain text
+  //     if (parsed?.content) {
+  //       return parsed.content
+  //         .map(item => 
+  //           item.content?.map(textItem => textItem.text).join("") || ""
+  //         )
+  //         .join("\n");
+  //     }
+  //     return description;
+  //   } catch {
+  //     // If not JSON, return as plain text
+  //     return description;
+  //   }
+  // };
 
   // function to delete Single task from the state
   function handleDeletedTask(deletedId) {
@@ -27,20 +51,19 @@ function Dashboard() {
   async function deleteAll() {
     if(tasks.length === 0){
       console.log("No Tasks to Delete!");
-      toast.info("No Tasks to Delete!")
-      setShowModal(false)
-      return
+      toast.info("No Tasks to Delete!");
+      setShowModal(false);
+      return;
     }
-    try{
-      await axiosInstance.delete("/task/delete-all")
+    try {
+      await axiosInstance.delete("/task/delete-all");
       setTasks([]);
-      setShowModal(false)
-      toast.success("All Tasks Deleted Successfully!")
-    }
-    catch(err){
-      console.log("ERROR : "+err?.data?.response.message || "Failed to delete tasks!" )
-      setShowModal(false)
-      toast.error("Error while deleting tasks!")
+      setShowModal(false);
+      toast.success("All Tasks Deleted Successfully!");
+    } catch(err) {
+      console.log("ERROR : "+err?.data?.response.message || "Failed to delete tasks!");
+      setShowModal(false);
+      toast.error("Error while deleting tasks!");
     }
   }
 
@@ -55,18 +78,26 @@ function Dashboard() {
         const { data } = await axiosInstance.get(
           `/task?${queryParams.toString()}`
         );
-        setTasks(data.tasks);
+        
+        // Process tasks to handle descriptions
+        const processedTasks = data.tasks.map(task => ({
+          ...task,
+          // Add parsed description for display
+          // parsedDescription: parseDescription(task.description)
+        }));
+        
+        setTasks(processedTasks);
       } catch (err) {
-        const msg =
-          err?.response?.data?.message || "Error while fetching tasks!";
-          setTasks([]);
+        const msg = err?.response?.data?.message || "Error while fetching tasks!";
+        setTasks([]);
         if(shownError.current === false){
           toast.error(msg);
           console.error("Error while fetching:", err);
-          shownError.current = true 
+          shownError.current = true;
         }
       }
     };
+    
     if (!userToken) {
       toast.warning("You Must Logged in to Access Dashboard!");
       navigate("/sign-in");
@@ -74,27 +105,31 @@ function Dashboard() {
     } else {
       fetchApi();
     }
-  }, [loading, userToken, priority, status]); // Runs whenever filter changes
+  }, [loading, userToken, priority, status, navigate]);
 
   return (
     <main className="bg-purple-100 min-h-[90vh]">
       <div className="w-full lg:min-h-[90vh] relative flex flex-col items-start p-5 md:pr-10 overflow-hidden md:pl-9 pl-3 pr-3">
         {/* User  */}
-          <div className="w-full flex flex-col items-end">
-            <p className="uppercase text-3xl font-semibold bg-purple-500 text-white p-2 px-4 rounded-4xl">
-              {user?.name?.slice(0, 1)}
-            </p>
-            <p className="">{user.email}</p> 
-          </div>
-        <div className="w-full flex justify-between items-center pb-6 pt-2">
-          <h2 className="text-3xl font-semibold ">Task Lists</h2>
-          {tasks.length > 0 && <p
-            onClick={() => setShowModal(true)}
-            className="text-red-600 font-semibold border-1 border-red-300 py-1 px-2 rounded-md hover:bg-red-600 transition ease-in-out duration-200 cursor-pointer hover:text-white"
-          >
-            Delete All
-          </p>}
+        <div className="w-full flex flex-col items-end">
+          <p className="uppercase text-3xl font-semibold bg-purple-500 text-white p-2 px-4 rounded-4xl">
+            {user?.name?.slice(0, 1)}
+          </p>
+          <p className="">{user.email}</p> 
         </div>
+        
+        <div className="w-full flex justify-between items-center pb-6 pt-2">
+          <h2 className="text-3xl font-semibold">Task Lists</h2>
+          {tasks.length > 0 && (
+            <p
+              onClick={() => setShowModal(true)}
+              className="text-red-600 font-semibold border-1 border-red-300 py-1 px-2 rounded-md hover:bg-red-600 transition ease-in-out duration-200 cursor-pointer hover:text-white"
+            >
+              Delete All
+            </p>
+          )}
+        </div>
+        
         {/* delete modal  */}
         {showModal && (
           <ConfirmModal
@@ -141,13 +176,13 @@ function Dashboard() {
               key={task._id}
               id={task._id}
               title={task.title}
-              description={task.description}
+              // description={task.parsedDescription} // Use parsed description
               status={task.status}
               deadline={task.deadline}
               priority={task.priority}
               onDelete={handleDeletedTask}
-              openTaskWithId={openTaskWithId}
-              setOpenTaskWithId={setOpenTaskWithId}
+              // openTaskWithId={openTaskWithId}
+              // setOpenTaskWithId={setOpenTaskWithId}
             />
           ))
         ) : ( 

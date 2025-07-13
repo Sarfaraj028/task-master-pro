@@ -32,8 +32,8 @@ export const getTask = asyncHandler(async(req, res, next) =>{
 
     const queryObj = { user: req.user._id }
 
-    if(status) queryObj.status = status
-    if(priority) queryObj.priority = priority
+    if(status && status !== null) queryObj.status = status
+    if(priority && priority !== null) queryObj.priority = priority
 
     console.log(queryObj)
     const tasks = await Task.find(queryObj).populate("user", "name email")

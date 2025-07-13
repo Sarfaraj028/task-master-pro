@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import { toast } from "react-toastify";
 import ConfirmModal from "./ConfirmModal";
@@ -8,12 +8,11 @@ function TaskCard({
   title,
   status,
   deadline,
-  priority,
   description,
   id,
   onDelete,
-  openTaskWithId,
-  setOpenTaskWithId,
+  // openTaskWithId,
+  // setOpenTaskWithId,
 }) {
   const [showModal, setShowModal] = useState(false);
 
@@ -32,14 +31,13 @@ function TaskCard({
   };
   return (
     <section
-      className={`task-container w-full ${
-        openTaskWithId === id ? "max-h-[1000px]" : "max-h-17"
-      } overflow-hidden bg-white rounded-md mb-4 shadow-lg transition-all ease-in-out duration-300 shadow-purple-200 p-3 px-4 pt-0`}
+      className={`task-container w-full 
+        overflow-hidden bg-white rounded-md mb-4 shadow-lg transition-all ease-in-out duration-300 shadow-purple-200 p-3 px-4 pt-0`}
     >
       {/* task head  */}
       <div
-        onClick={() => setOpenTaskWithId(openTaskWithId === id ? null : id)}
-        className="task-head w-full max-h-24 flex justify-between py-3 items-center cursor-pointer relative"
+        // onClick={() => setOpenTaskWithId(openTaskWithId === id ? null : id)}
+        className="task-head w-full flex justify-between py-3 items-center cursor-pointer relative"
       >
         <div>
           <h3 className="text-lg">{title}</h3>
@@ -60,7 +58,7 @@ function TaskCard({
           {/* task edit button  */}
           <li className="list-none inline">
             <NavLink to={`/edit/${id}`}>
-              <i className="ri-pencil-line text-xl p-4 text-purple-600 hover:text-purple-700 cursor-pointer"></i>
+              <i className="ri-eye-line text-xl p-4 text-purple-600 hover:text-purple-700 cursor-pointer"></i>
             </NavLink>
           </li>
           {/* task delete button  */}
@@ -79,9 +77,9 @@ function TaskCard({
         )}
       </div>
       {/* task description  */}
-      <div className="task-desc pt-3 border-t-2 border-purple-200 mt-1">
+      {/* <div className="task-desc pt-3 border-t-2 border-purple-200 mt-1">
         {description}
-      </div>
+      </div> */}
     </section>
   );
 }
