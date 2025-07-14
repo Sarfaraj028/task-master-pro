@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import axiosInstance from "../api/axiosInstance";
-import Heading from "./heading";
+import Heading from "./H2Heading";
 // import { useAuth } from "../context/authContext";
 // import { useNavigate } from "react-router-dom";
 

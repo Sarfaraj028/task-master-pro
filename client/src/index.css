@@ -16,6 +16,64 @@ body{
 }
 
 /* check box of tiptap*/
+
+/* editor box css  */
+
+.editor-box .ProseMirror {
+  min-height: 20rem; /* or 300px, 500px */
+  padding: 1rem;
+  outline: none;
+  white-space: pre-wrap;
+  border: 1px solid #C27AFF;
+  border-radius: 5px;
+}
+.editor-box .ProseMirror:focus{
+  border: 1px solid #9F3CE3;
+}
+
+/* headings   */
+
+.ProseMirror h1 {
+  font-size: 2rem; /* text-3xl */
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+.ProseMirror h2 {
+  font-size: 1.5rem; /* text-3xl */
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
+.ProseMirror h3 {
+  font-size: 1rem; /* text-3xl */
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+}
+/* blockquote  */
+.editor-box blockquote {
+  padding-left: 1rem;
+  border-left: 3px solid #a855f7; /* purple-600 */
+  color: #555;
+  font-style: italic;
+  margin: 1rem 0;
+}
+
+/* bullet list  */
+.editor-box ul{
+  list-style-type: disc;
+  padding-left: 1rem;
+  margin-bottom: .5rem;
+}
+.editor-box ol{
+  list-style-type: decimal;
+  padding-left: 1rem;
+  margin-bottom: .5rem;
+}
+
+.editor-box ul li, ol li{
+  margin-bottom: .3rem;
+  padding-left: .5rem;
+}
+
 .tiptap ul[data-type="taskList"] {
   list-style: none;
   padding: 0;
@@ -31,6 +89,24 @@ body{
   margin-right: 0.5rem;
   user-select: none;
 }
+
+
+/* Basic table styling */
+/* This keeps all cells same width initially */
+.ProseMirror table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ProseMirror td,
+.ProseMirror th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
 
 .tiptap ul[data-type="taskList"] li > div {
   flex: 1 1 auto;
