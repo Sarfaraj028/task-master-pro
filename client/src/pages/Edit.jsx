@@ -26,6 +26,7 @@ function Edit() {
   const [priority, setPriority] = useState("medium");
   const [status, setStatus] = useState(null);
   const [taskItems, setTaskItems] = useState([]);
+  const [charCount, setCharCount] = useState(0)
 
   const { userToken, loading } = useAuth();
   const navigate = useNavigate();
@@ -56,6 +57,10 @@ function Edit() {
     content: ``,
     onUpdate({ editor }) {
       updateStatusFromEditor(editor); // ✅ still run every time
+
+      // char count 
+      const planText = editor.getText()
+      setCharCount(planText)
     },
   });
 
@@ -436,7 +441,7 @@ function Edit() {
         {/* </div> */}
 
         <div className="w-full flex justify-between">
-          <p>Characters : {editor.length}</p>
+          <p>Characters : {charCount.length}</p>
           <button
             type="submit"
             className="cursor-pointer bg-purple-700 text-white p-3 px-8 rounded hover:bg-purple-800 transition"
