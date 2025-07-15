@@ -26,7 +26,8 @@ function Edit() {
   const [priority, setPriority] = useState("medium");
   const [status, setStatus] = useState(null);
   const [taskItems, setTaskItems] = useState([]);
-  const [charCount, setCharCount] = useState(0)
+  const [charCount, setCharCount] = useState(0);
+  const [wordCount, setWordCount] = useState(0);
 
   const { userToken, loading } = useAuth();
   const navigate = useNavigate();
@@ -58,9 +59,11 @@ function Edit() {
     onUpdate({ editor }) {
       updateStatusFromEditor(editor); // ✅ still run every time
 
-      // char count 
-      const planText = editor.getText()
-      setCharCount(planText)
+      // char count
+      const planText = editor.getText();
+      setCharCount(planText);
+      const words = planText.trim().split(/\s+/g).filter(Boolean).length;
+      setWordCount(words);
     },
   });
 
@@ -139,6 +142,12 @@ function Edit() {
     });
 
     setTaskItems(items);
+
+    // ✅ if no checkboxes, skip auto update
+    if (items.length === 0) {
+      console.log("No checkboxes found – not auto updating status");
+      return;
+    }
 
     if (setStatusManually.current) {
       console.log("✅ Manual status already set");
@@ -441,7 +450,10 @@ function Edit() {
         {/* </div> */}
 
         <div className="w-full flex justify-between">
-          <p>Characters : {charCount.length}</p>
+          <div>
+            <p>Characters : {charCount.length}</p>
+            <p>Words : {wordCount}</p>
+          </div>
           <button
             type="submit"
             className="cursor-pointer bg-purple-700 text-white p-3 px-8 rounded hover:bg-purple-800 transition"
