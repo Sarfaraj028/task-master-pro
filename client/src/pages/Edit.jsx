@@ -12,10 +12,10 @@ import StarterKit from "@tiptap/starter-kit";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import HighLight from "@tiptap/extension-highlight";
-import {Table} from "@tiptap/extension-table";
-import {TableRow} from "@tiptap/extension-table";
-import {TableCell} from "@tiptap/extension-table";
-import {TableHeader} from "@tiptap/extension-table";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table";
+import { TableCell } from "@tiptap/extension-table";
+import { TableHeader } from "@tiptap/extension-table";
 
 function Edit() {
   const [formData, setFormData] = useState({
@@ -24,14 +24,15 @@ function Edit() {
     deadline: "",
   });
   const [priority, setPriority] = useState("medium");
-  const [status, setStatus] = useState("pending");
+  const [status, setStatus] = useState(null);
   const [taskItems, setTaskItems] = useState([]);
 
   const { userToken, loading } = useAuth();
   const navigate = useNavigate();
   const { taskId } = useParams();
   const errorShown = useRef(false);
-
+  const setStatusManually = useRef(false);
+  const skipEditorStatusSync = useRef(false);
 
   // tiptap implementation
   const editor = useEditor({
@@ -54,7 +55,7 @@ function Edit() {
     ],
     content: ``,
     onUpdate({ editor }) {
-      updateStatusFromEditor(editor);
+      updateStatusFromEditor(editor); // ✅ still run every time
     },
   });
 
@@ -86,10 +87,21 @@ function Edit() {
         if (description) {
           try {
             const parsed = JSON.parse(description);
+            skipEditorStatusSync.current = true; // 👈 BLOCK onUpdate temporarily
             editor.commands.setContent(parsed);
-            setTimeout(() => updateStatusFromEditor(editor), 100);
+            setTimeout(() => {
+              skipEditorStatusSync.current = false;
+
+              // ⛑️ force update taskItems so that conditional rendering of status works
+              const items = [];
+              editor.state.doc.descendants((node) => {
+                if (node.type.name === "taskItem") {
+                  items.push(node);
+                }
+              });
+              setTaskItems(items); // 👈 important: update state so that UI shows div instead of dropdown
+            }, 300);
           } catch (parseError) {
-            console.log("Description is plain text, not JSON");
             editor.commands.setContent(`<p>${description}</p>`);
           }
         } else {
@@ -109,27 +121,33 @@ function Edit() {
   }, [taskId, userToken, loading, navigate, editor]);
 
   const updateStatusFromEditor = (editor) => {
-    const newItems = [];
+    if (skipEditorStatusSync.current) {
+      console.log("⏸️ Skipping status update from editor during initial load");
+      return;
+    }
+
+    const items = [];
     editor.state.doc.descendants((node) => {
       if (node.type.name === "taskItem") {
-        newItems.push(node);
+        items.push(node);
       }
     });
-    console.log(newItems);
 
-    setTaskItems(newItems);
+    setTaskItems(items);
 
-    const totalTasks = newItems.length;
-    const completedTasks = newItems.filter((node) => node.attrs.checked).length;
+    if (setStatusManually.current) {
+      console.log("✅ Manual status already set");
+      return;
+    }
 
-    console.log(newItems);
+    const total = items.length;
+    const completed = items.filter((n) => n.attrs.checked).length;
 
     let newStatus = "pending";
-    if (completedTasks > 0 && completedTasks < totalTasks) {
-      newStatus = "in-progress";
-    } else if (completedTasks === totalTasks && totalTasks > 0) {
-      newStatus = "completed";
-    }
+    if (completed === total && total > 0) newStatus = "completed";
+    else if (completed > 0) newStatus = "in-progress";
+
+    console.log("🛠️ Auto-updated status from editor:", newStatus);
     setStatus(newStatus);
   };
 
@@ -153,6 +171,7 @@ function Edit() {
         status,
       });
       toast.success(`Task updated successfully!`);
+      setStatusManually.current = false;
       navigate("/dashboard");
     } catch (err) {
       const msg = err?.response?.data?.message || "Update failed!";
@@ -168,35 +187,51 @@ function Edit() {
         onSubmit={handleSubmit}
         className="lg:p-8 md:p-3 p-2 lg:pt-3 md:pt-3 pt-3 rounded-lg bg-white shadow-lg w-full max-w-5xl"
       >
-        <Heading> Update Your Task </Heading>
+        <Heading> Your Task </Heading>
 
-        <div className="flex flex-wrap md:flex-nowrap gap-5 float-end mt-4">
-          <select
-            value={priority}
-            onChange={(e) => setPriority(e.target.value)}
-            className="text-sm mb-4 p-2 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
-          >
-            <option value="low">low</option>
-            <option value="medium">medium</option>
-            <option value="high">high</option>
-          </select>
-          {taskItems.length > 0 ? (
-            <div
-              className={`text-sm mb-4 p-2 rounded-md ${
-                status === "pending"
-                  ? "bg-red-300"
-                  : status === "in-progress"
-                  ? "bg-orange-300"
-                  : "bg-green-300"
-              }`}
-            >
-              {status}
-            </div>
-          ) : (
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className={`text-sm mb-4 p-2 pl-0 cursor-pointer outline-0 rounded-md
+        <div className="flex flex-wrap md:flex-nowrap gap-5 bg-purple-50 p-2 rounded-md float-end my-4 ">
+          <table className="table-auto">
+            <thead>
+              <tr className="text-sm font-semibold border-b-2 border-purple-400">
+                <td>Priority</td>
+                <td>Status</td>
+                <td>Deadline</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <select
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
+                    className="text-sm mb-4 mr-2 mt-2 p-2 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
+                  >
+                    <option value="low">low</option>
+                    <option value="medium">medium</option>
+                    <option value="high">high</option>
+                  </select>
+                </td>
+                <td>
+                  {taskItems.length > 0 ? (
+                    <div
+                      className={`text-sm mb-4 mr-2 mt-2 p-2 rounded-md ${
+                        status === "pending"
+                          ? "bg-red-300"
+                          : status === "in-progress"
+                          ? "bg-orange-300"
+                          : "bg-green-300"
+                      }`}
+                    >
+                      {status}
+                    </div>
+                  ) : (
+                    <select
+                      value={status || "pending"}
+                      onChange={(e) => {
+                        setStatus(e.target.value);
+                        setStatusManually.current = true;
+                      }}
+                      className={`text-sm mb-4 mr-2 mt-2 p-2 pl-0 cursor-pointer outline-0 rounded-md
                 ${
                   status === "pending"
                     ? "bg-red-300"
@@ -205,32 +240,39 @@ function Edit() {
                     : "bg-green-300"
                 }
                   `}
-            >
-              <option value="pending" className="bg-white">
-                pending
-              </option>
-              <option value="in-progress" className="bg-white">
-                in-progress
-              </option>
-              <option value="completed" className="bg-white">
-                completed
-              </option>
-            </select>
-          )}
-
-          <input
-            type="date"
-            name="deadline"
-            min={
-              new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-                .toISOString()
-                .split("T")[0]
-            }
-            placeholder="Enter Deadline"
-            value={formData.deadline}
-            onChange={handleChange}
-            className="text-sm mb-4 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
-          />
+                    >
+                      <option value="pending" className="bg-white">
+                        pending
+                      </option>
+                      <option value="in-progress" className="bg-white">
+                        in-progress
+                      </option>
+                      <option value="completed" className="bg-white">
+                        completed
+                      </option>
+                    </select>
+                  )}
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    name="deadline"
+                    min={
+                      new Date(
+                        Date.now() - new Date().getTimezoneOffset() * 60000
+                      )
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                    placeholder="Enter Deadline"
+                    value={formData.deadline}
+                    onChange={handleChange}
+                    className="inline-block text-sm mb-1 mt-2 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         <input
@@ -384,7 +426,6 @@ function Edit() {
           >
             Delete Table
           </button>
-          
         </div>
 
         {/* <div className="w-full mb-4 p-3 border-1 focus:border-purple-700 border-purple-300 bg-purple-50 outline-0 rounded min-h-[200px]"> */}
