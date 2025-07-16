@@ -16,6 +16,9 @@ import { Table } from "@tiptap/extension-table";
 import { TableRow } from "@tiptap/extension-table";
 import { TableCell } from "@tiptap/extension-table";
 import { TableHeader } from "@tiptap/extension-table";
+import  Underline  from "@tiptap/extension-underline"
+import  Strike  from "@tiptap/extension-strike"
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
 function Edit() {
   const [formData, setFormData] = useState({
@@ -40,6 +43,9 @@ function Edit() {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        strike: false,
+        underline: false,
+        horizontalRule: false,
         bulletList: { keepMarks: true, keepAttributes: false },
         orderedList: { keepMarks: true, keepAttributes: false },
         heading: { levels: [1, 2, 3] },
@@ -49,6 +55,9 @@ function Edit() {
         nested: true,
         HTMLAttributes: { class: "flex items-start" },
       }),
+      Underline,
+      Strike,
+      HorizontalRule,
       HighLight,
       Table.configure({ resizable: true }),
       TableRow,
@@ -91,7 +100,7 @@ function Edit() {
         });
         setPriority(priority);
         setStatus(status);
-
+        console.log(editor?.commands)
         if (description) {
           try {
             const parsed = JSON.parse(description);
@@ -399,6 +408,31 @@ function Edit() {
           >
             Ordered List
           </button>
+          {/* Line through  */}
+          <button 
+            type="button"
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
+          >
+            Strike
+          </button>
+          {/* Underline  */}
+          <button 
+            type="button"
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
+          >
+            Underline
+          </button>
+          {/* Horizontal line  */}
+          <button 
+            type="button"
+            onClick={() => editor.chain().focus().setHorizontalRule().run()}
+            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
+          >
+            Horizontal line
+          </button>
+          
           {/* Add Table */}
           <button
             type="button"
@@ -456,9 +490,9 @@ function Edit() {
           </div>
           <button
             type="submit"
-            className="cursor-pointer bg-purple-700 text-white p-3 px-8 rounded hover:bg-purple-800 transition"
+            className="fixed bottom-2 right-2 lg:right-10 md:right-6 cursor-pointer bg-purple-700 text-white p-2 px-6 rounded hover:bg-purple-800 transition"
           >
-            Update Task
+            Save
           </button>
         </div>
       </form>
