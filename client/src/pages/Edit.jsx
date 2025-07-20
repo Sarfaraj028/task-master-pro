@@ -19,6 +19,7 @@ import { TableHeader } from "@tiptap/extension-table";
 import  Underline  from "@tiptap/extension-underline"
 import  Strike  from "@tiptap/extension-strike"
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import { toolbarOptions } from "../utils/toolBarOptions";
 
 function Edit() {
   const [formData, setFormData] = useState({
@@ -204,6 +205,10 @@ function Edit() {
 
   if (!userToken) return null;
 
+  // editor buttons 
+  const buttons = toolbarOptions(editor)
+
+
   return (
     <div className="w-full bg-purple-100 min-h-[90vh] relative flex flex-col items-center md:p-5 p-1 overflow-hidden md:pt-5 pt-5">
       <form
@@ -330,150 +335,19 @@ function Edit() {
             </svg>
             Add Checklist
           </button>
-          {/* h1 Heading  */}
-          <button
-            type="button"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            H1
-          </button>
-          {/* h2 Heading  */}
-          <button
-            type="button"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            }
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            H2
-          </button>
-          {/* h3 Heading  */}
-          <button
-            type="button"
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
-            }
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            H3
-          </button>
-          {/* text boldness  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBold().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Bold
-          </button>
-          {/* italic text  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleItalic().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Italic
-          </button>
-          {/* BlockQuoted text  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            BlockQuote
-          </button>
-          {/* Highlighted text  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Mark
-          </button>
-          {/* Bullet Lists  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            BulletList
-          </button>
-          {/* Ordered Lists  */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Ordered List
-          </button>
-          {/* Line through  */}
-          <button 
-            type="button"
-            onClick={() => editor.chain().focus().toggleStrike().run()}
-            className="flex items-center text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Strike
-          </button>
-          {/* Underline  */}
-          <button 
-            type="button"
-            onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Underline
-          </button>
-          {/* Horizontal line  */}
-          <button 
-            type="button"
-            onClick={() => editor.chain().focus().setHorizontalRule().run()}
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Horizontal line
-          </button>
-          
-          {/* Add Table */}
-          <button
-            type="button"
-            onClick={() =>
-              editor
-                .chain()
-                .focus()
-                .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-                .run()
-            }
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Table
-          </button>
 
-          {/* Add Row */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().addRowAfter().run()}
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            + Row
-          </button>
-
-          {/* Add Column */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().addColumnAfter().run()}
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            + Col
-          </button>
-
-          {/* Delete Table */}
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().deleteTable().run()}
-            className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-          >
-            Delete Table
-          </button>
+          {/* editor features  */}
+          {
+            buttons.map((btn) =>(
+              <button
+                key={btn.label}
+                onClick={btn.action}
+                className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
+              >
+                {btn.label}
+              </button>
+            ))
+          }
         </div>
 
         {/* <div className="w-full mb-4 p-3 border-1 focus:border-purple-700 border-purple-300 bg-purple-50 outline-0 rounded min-h-[200px]"> */}
