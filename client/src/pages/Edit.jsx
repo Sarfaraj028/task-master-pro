@@ -5,20 +5,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
 import { useRef } from "react";
 import Heading from "../components/H2Heading";
+import { useTaskEditor } from "../editor/EditorSetup";
 
 // tiptap
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import TaskList from "@tiptap/extension-task-list";
-import TaskItem from "@tiptap/extension-task-item";
-import HighLight from "@tiptap/extension-highlight";
-import { Table } from "@tiptap/extension-table";
-import { TableRow } from "@tiptap/extension-table";
-import { TableCell } from "@tiptap/extension-table";
-import { TableHeader } from "@tiptap/extension-table";
-import  Underline  from "@tiptap/extension-underline"
-import  Strike  from "@tiptap/extension-strike"
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import { EditorContent } from "@tiptap/react";
 import { toolbarOptions } from "../utils/toolBarOptions";
 
 function Edit() {
@@ -41,31 +31,7 @@ function Edit() {
   const skipEditorStatusSync = useRef(false);
 
   // tiptap implementation
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        strike: false,
-        underline: false,
-        horizontalRule: false,
-        bulletList: { keepMarks: true, keepAttributes: false },
-        orderedList: { keepMarks: true, keepAttributes: false },
-        heading: { levels: [1, 2, 3] },
-      }),
-      TaskList,
-      TaskItem.configure({
-        nested: true,
-        HTMLAttributes: { class: "flex items-start" },
-      }),
-      Underline,
-      Strike,
-      HorizontalRule,
-      HighLight,
-      Table.configure({ resizable: true }),
-      TableRow,
-      TableCell,
-      TableHeader,
-    ],
-    content: ``,
+  const editor = useTaskEditor({
     onUpdate({ editor }) {
       updateStatusFromEditor(editor); // ✅ still run every time
 
@@ -101,7 +67,7 @@ function Edit() {
         });
         setPriority(priority);
         setStatus(status);
-        console.log(editor?.commands)
+        console.log(editor?.commands);
         if (description) {
           try {
             const parsed = JSON.parse(description);
@@ -205,9 +171,8 @@ function Edit() {
 
   if (!userToken) return null;
 
-  // editor buttons 
-  const buttons = toolbarOptions(editor)
-
+  // editor buttons
+  const buttons = toolbarOptions(editor);
 
   return (
     <div className="w-full bg-purple-100 min-h-[90vh] relative flex flex-col items-center md:p-5 p-1 overflow-hidden md:pt-5 pt-5">
@@ -217,8 +182,17 @@ function Edit() {
       >
         <Heading> Your Task </Heading>
 
-        <div className="flex flex-wrap md:flex-nowrap gap-5 bg-purple-50 p-2 rounded-md float-end my-4 ">
-          <table className="table-auto">
+        <div className="flex items-end flex-wrap md:flex-nowrap gap-5  p-2 my-3 ">
+          <input
+            type="text"
+            name="title"
+            placeholder="Update Task Title"
+            value={formData.title}
+            onChange={handleChange}
+            className="w-full font-bold text-lg p-1 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
+          />
+          <div className="p-2 bg-purple-50 rounded-md">
+          <table className="table-auto ">
             <thead>
               <tr className="text-sm font-semibold border-b-2 border-purple-400">
                 <td>Priority</td>
@@ -301,16 +275,8 @@ function Edit() {
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
-
-        <input
-          type="text"
-          name="title"
-          placeholder="Update Task Title"
-          value={formData.title}
-          onChange={handleChange}
-          className="w-full font-bold text-lg mb-4 pt-3 p-2 pl-0 border-b-2 focus:border-purple-700 border-purple-400 outline-0"
-        />
 
         {/* button to add checkBox */}
         <div className="flex flex-wrap gap-2 mb-2">
@@ -337,17 +303,16 @@ function Edit() {
           </button>
 
           {/* editor features  */}
-          {
-            buttons.map((btn) =>(
-              <button
-                key={btn.label}
-                onClick={btn.action}
-                className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
-              >
-                {btn.label}
-              </button>
-            ))
-          }
+          {buttons.map((btn) => (
+            <button
+              type="button"
+              key={btn.label}
+              onClick={btn.action}
+              className="text-sm bg-purple-200 hover:bg-purple-300 p-1 px-2 rounded"
+            >
+              {btn.label}
+            </button>
+          ))}
         </div>
 
         {/* <div className="w-full mb-4 p-3 border-1 focus:border-purple-700 border-purple-300 bg-purple-50 outline-0 rounded min-h-[200px]"> */}

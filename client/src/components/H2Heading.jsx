@@ -2,7 +2,7 @@ import React from "react";
 
 function Heading({ children }) {
   return (
-    <div className="relative mt-6">
+    <div className="relative mt-2">
       <h2 className="text-2xl md:text-3xl font-bold text-center pb-2">
         {children}
       </h2>
