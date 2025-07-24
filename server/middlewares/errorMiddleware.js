@@ -24,7 +24,7 @@ export const errorMiddleware = (err, req, res, next) =>{
         err = new ErrorHandler(message, statusCode)
     }
 
-    //invalid id or wrong datatyoe entered || the value not entered as exopected.
+    //invalid id or wrong datatype entered || the value not entered as expected.
     if(err.name === "CastError"){
         const statusCode = 400;
         const message = `Resources Not Found! ${err.path}`;
