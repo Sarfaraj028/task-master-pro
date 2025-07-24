@@ -19,6 +19,7 @@ export const createDoc = asyncHandler(async (req, res) => {
   });
 });
 
+
 // update document
 export const updateDoc = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -47,6 +48,7 @@ export const updateDoc = asyncHandler(async (req, res) => {
   });
 });
 
+
 // get document by id
 export const getDocById = asyncHandler(async (req, res) => {
   const { id } = req.params;
@@ -70,3 +72,17 @@ export const getDocById = asyncHandler(async (req, res) => {
     data: doc
   });
 });
+
+
+//get all docs 
+export const getAllDocs = asyncHandler( async (req, res) =>{
+
+    const docs = await Docs.find({createdBy: req.user._id})
+    if(docs.length === 0) throw new ErrorHandler("No documents to show!", 404)
+
+    res.status(200).json({
+        success: true,
+        message: "Document fetched successfully.",
+        data: docs
+    })
+})

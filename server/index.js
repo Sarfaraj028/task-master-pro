@@ -5,6 +5,7 @@ import apiRoute from "./routes/apiRoutes.js"
 import { connectDB } from "./db/db.js"
 import { errorMiddleware } from "./middlewares/errorMiddleware.js"
 import userRoute from "./routes/userRoute.js"
+import docRoutes from './routes/docRoutes.js'
 // import { User } from "./models/userModel.js"
 
 const app = express()
@@ -29,8 +30,11 @@ app.get("/", (req, res)=>{
 })
 app.use("/api/user/", userRoute)
 
-//all tasks routes
+//task routes
 app.use("/api/task", apiRoute)
+
+//doc routes
+app.use("/api/doc", docRoutes)
 
 //global Error handler
 app.use(errorMiddleware)
